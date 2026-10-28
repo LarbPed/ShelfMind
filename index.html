@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="th">
 <head>
@@ -15,688 +14,601 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Prompt:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <style>
   :root {
     --blue: #1f6fe5;
-    --blue-dark: #1556c0;
-    --blue-soft: #e8f1fe;
-    --blue-light: #a9cdfa;
-    --ink: #0f1a2b;
-    --muted: #5b6b82;
-    --line: #e3e9f2;
-    --bg: #f4f7fc;
+    --blue-dark: #1558c4;
+    --blue-soft: #eaf2fe;
+    --blue-line: #c7dbfb;
+    --ink: #0f1b2d;
+    --ink-2: #33415a;
+    --muted: #6a778c;
+    --line: #e4eaf3;
+    --bg: #f5f8fc;
     --card: #ffffff;
-    --good: #12a150;
-    --good-soft: #e5f7ed;
-    --bad: #d6453d;
-    --warn-soft: #fff6e0;
-    --warn-ink: #a86b00;
-    --warn: var(--warn-ink);
-    --note-line: #f3dfa5;
-    --note-ink: #7a5a00;
-    --bad-soft: #fde9e7;
-    --surface: #ffffff;
-    --surface-2: #edf2f9;
-    --header-bg: rgba(255,255,255,.8);
-    --tray-bg: rgba(15,26,43,.92);
-    --tray-fg: #ffffff;
-    --glow: rgba(31,111,229,.10);
-    --hero-a: #2b7cf0;
-    --hero-b: #1350b8;
-    --tint-milk: #eaf3ff;
-    --tint-drink: #fff1e6;
-    --tint-snack: #fdf3dc;
-    --tint-noodle: #fde9e7;
-    --tint-oil: #f1f7e3;
-    --tint-rice: #f2f2f5;
-    --radius: 20px;
-    --shadow: 0 1px 2px rgba(15,26,43,.04), 0 8px 24px -8px rgba(15,26,43,.10);
-    --shadow-lg: 0 2px 4px rgba(15,26,43,.04), 0 20px 40px -12px rgba(31,111,229,.25);
-    color-scheme: light;
-  }
-  :root[data-theme="dark"] {
-    --blue: #4a8ff5;
-    --blue-dark: #3a7de6;
-    --blue-soft: #16294a;
-    --blue-light: #2c5aa0;
-    --ink: #e6edf7;
-    --muted: #93a3bb;
-    --line: #223049;
-    --bg: #0a101c;
-    --card: #111a2b;
-    --good: #3dd17f;
-    --good-soft: #10301f;
-    --bad: #f06b62;
-    --warn-soft: #33290f;
-    --warn-ink: #f2c35a;
-    --note-line: #5a4716;
-    --note-ink: #f2d27a;
-    --bad-soft: #3a1a18;
-    --surface: #111a2b;
-    --surface-2: #18233a;
-    --header-bg: rgba(10,16,28,.75);
-    --tray-bg: rgba(30,43,68,.92);
-    --tray-fg: #ffffff;
-    --glow: rgba(74,143,245,.16);
-    --hero-a: #1d5fcc;
-    --hero-b: #0f2f73;
-    --tint-milk: #172a46;
-    --tint-drink: #3a2616;
-    --tint-snack: #36301a;
-    --tint-noodle: #3a1d1b;
-    --tint-oil: #24301a;
-    --tint-rice: #232836;
-    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -8px rgba(0,0,0,.45);
-    --shadow-lg: 0 2px 4px rgba(0,0,0,.3), 0 20px 40px -12px rgba(0,0,0,.6);
-    color-scheme: dark;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; }
-  body {
-    font-family: "IBM Plex Sans Thai", system-ui, sans-serif;
-    background:
-      radial-gradient(900px 420px at 10% -10%, var(--glow), transparent 70%),
-      radial-gradient(700px 380px at 100% 0%, var(--glow), transparent 70%),
-      var(--bg);
-    background-attachment: fixed;
-    color: var(--ink);
-    -webkit-font-smoothing: antialiased;
-    padding-bottom: 110px;
-    min-height: 100vh;
-  }
-  h1, h2, h3, .brand, .display { font-family: "Prompt", "IBM Plex Sans Thai", sans-serif; }
-  button { font: inherit; cursor: pointer; }
-  input, select { font: inherit; }
-  body, .card, header, .field, .btn-light, .cat, th, td, .theme-btn { transition: background-color .2s, border-color .2s, color .2s, box-shadow .2s, transform .2s; }
-
-  /* Header */
-  header {
-    position: sticky; top: 0; z-index: 20;
-    background: var(--header-bg); backdrop-filter: saturate(1.6) blur(14px); -webkit-backdrop-filter: saturate(1.6) blur(14px);
-    border-bottom: 1px solid var(--line);
-  }
-  .bar { max-width: 1120px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 21px; letter-spacing: -.01em; }
-  .brand .s { background: linear-gradient(135deg, #5aa2ff, var(--blue)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .brand svg { width: 36px; height: 36px; filter: drop-shadow(0 4px 8px rgba(31,111,229,.3)); }
-  .tagline { color: var(--muted); font-size: 13px; margin-left: auto; }
-  .theme-btn { margin-left: 8px; width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); display: grid; place-items: center; padding: 0; flex: none; }
-  .theme-btn:hover { background: var(--blue-soft); color: var(--blue); }
-  .theme-btn svg { width: 20px; height: 20px; }
-  .theme-btn .sun { display: none; }
-  :root[data-theme="dark"] .theme-btn .sun { display: block; }
-  :root[data-theme="dark"] .theme-btn .moon { display: none; }
-  @media (max-width: 560px) { .tagline { display: none; } .theme-btn { margin-left: auto; } }
-
-  main { max-width: 1120px; margin: 0 auto; padding: 22px 16px; }
-
-  /* Hero */
-  .hero {
-    position: relative; overflow: hidden;
-    border-radius: 28px; padding: 32px 32px 28px;
-    background: linear-gradient(135deg, var(--hero-a), var(--hero-b));
-    color: #fff; box-shadow: var(--shadow-lg);
-  }
-  .hero::before, .hero::after { content: ""; position: absolute; border-radius: 28px; transform: skewX(-24deg); pointer-events: none; }
-  .hero::before { width: 300px; height: 70px; right: -20px; top: 36px; background: rgba(255,255,255,.14); }
-  .hero::after { width: 380px; height: 110px; right: -70px; top: 122px; background: rgba(255,255,255,.08); }
-  .hero-inner { position: relative; z-index: 1; max-width: 640px; }
-  .eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; letter-spacing: .02em; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.25); padding: 4px 12px; border-radius: 99px; }
-  .hero h1 { font-size: clamp(26px, 4.4vw, 40px); line-height: 1.2; margin: 14px 0 8px; font-weight: 700; letter-spacing: -.01em; }
-  .hero p { margin: 0; color: rgba(255,255,255,.85); font-size: 16px; }
-  .features { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 18px 0 22px; font-size: 14px; color: rgba(255,255,255,.92); }
-  .features span { display: inline-flex; align-items: center; gap: 6px; }
-  .features svg { width: 16px; height: 16px; color: #a9e7c4; }
-  @media (max-width: 560px) { .hero { padding: 24px 20px 20px; border-radius: 22px; } .hero::before, .hero::after { opacity: .6; } }
-
-  /* Tabs (inside hero) */
-  .tabs { display: inline-grid; grid-template-columns: 1fr 1fr; gap: 4px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.2); padding: 4px; border-radius: 16px; width: min(100%, 440px); }
-  .tab { border: 0; background: transparent; padding: 11px 12px; border-radius: 12px; font-weight: 600; color: rgba(255,255,255,.85); display: flex; gap: 8px; align-items: center; justify-content: center; transition: background .2s, color .2s; }
-  .tab:hover { color: #fff; background: rgba(255,255,255,.08); }
-  .tab.active { background: #fff; color: var(--hero-b); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
-  .tab svg { width: 18px; height: 18px; }
-  .tab { white-space: nowrap; }
-  @media (max-width: 420px) { .tab { font-size: 14px; padding: 10px 6px; gap: 6px; } .tab svg { width: 16px; height: 16px; } }
-
-  .panel { margin-top: 20px; animation: rise .3s ease; }
-  @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-  .hidden { display: none !important; }
-
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
-  .section-title { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 16px; font-weight: 600; }
-  .section-title .dot { width: 8px; height: 8px; border-radius: 99px; background: var(--blue); box-shadow: 0 0 0 4px var(--blue-soft); }
-
-  /* Scanner */
-  .scan-wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px; }
-  @media (max-width: 820px) { .scan-wrap { grid-template-columns: 1fr; } }
-  .viewer {
-    position: relative; aspect-ratio: 4/3; border-radius: var(--radius); overflow: hidden; display: grid; place-items: center; color: #c9d6ea;
-    background:
-      radial-gradient(circle at 50% 40%, rgba(74,143,245,.25), transparent 60%),
-      linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px) 0 0 / 28px 28px,
-      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px) 0 0 / 28px 28px,
-      #0a1222;
-    box-shadow: var(--shadow-lg);
-  }
-  #reader { position: absolute; inset: 0; }
-  #reader video { width: 100% !important; height: 100% !important; object-fit: cover; }
-  .viewer-idle { position: relative; z-index: 1; text-align: center; padding: 20px; }
-  .scan-icon { width: 84px; height: 84px; margin: 0 auto; border-radius: 24px; display: grid; place-items: center; background: rgba(74,143,245,.15); border: 1px solid rgba(169,205,250,.25); animation: pulse 2.4s ease-in-out infinite; }
-  .scan-icon svg { width: 44px; height: 44px; color: #a9cdfa; }
-  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(74,143,245,.35); } 50% { box-shadow: 0 0 0 14px rgba(74,143,245,0); } }
-  .viewer-idle p { margin: 16px 0 20px; font-size: 14px; line-height: 1.6; color: #b8c7de; }
-  .scan-frame { position: absolute; inset: 24% 12%; z-index: 2; pointer-events: none; box-shadow: 0 0 0 999px rgba(0,0,0,.35); border-radius: 14px; }
-  .scan-frame i { position: absolute; width: 28px; height: 28px; border: 3px solid #5aa2ff; }
-  .scan-frame i:nth-child(1) { top: 0; left: 0; border-right: 0; border-bottom: 0; border-top-left-radius: 14px; }
-  .scan-frame i:nth-child(2) { top: 0; right: 0; border-left: 0; border-bottom: 0; border-top-right-radius: 14px; }
-  .scan-frame i:nth-child(3) { bottom: 0; left: 0; border-right: 0; border-top: 0; border-bottom-left-radius: 14px; }
-  .scan-frame i:nth-child(4) { bottom: 0; right: 0; border-left: 0; border-top: 0; border-bottom-right-radius: 14px; }
-  .scan-line { position: absolute; left: 6%; right: 6%; height: 2px; background: linear-gradient(90deg, transparent, #5aa2ff, transparent); box-shadow: 0 0 14px #5aa2ff; animation: sweep 2s ease-in-out infinite; }
-  @keyframes sweep { 0%,100% { top: 10%; } 50% { top: 88%; } }
-  .scan-count { position: absolute; top: 14px; left: 14px; z-index: 3; background: rgba(255,255,255,.95); color: #0f1a2b; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 99px; display: flex; align-items: center; gap: 6px; }
-  .scan-count::before { content: ""; width: 8px; height: 8px; border-radius: 99px; background: #e5484d; animation: blink 1.2s infinite; }
-  @keyframes blink { 50% { opacity: .3; } }
-  .stop-btn { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); z-index: 3; }
-
-  .btn { border: 0; border-radius: 12px; padding: 11px 18px; font-weight: 600; display: inline-flex; gap: 8px; align-items: center; justify-content: center; transition: background .15s, transform .1s, box-shadow .15s; }
-  .btn:active { transform: translateY(1px) scale(.99); }
-  .btn-primary { background: linear-gradient(135deg, #3d8bf7, var(--blue)); color: #fff; box-shadow: 0 6px 16px -6px rgba(31,111,229,.6); }
-  .btn-primary:hover { background: linear-gradient(135deg, #3483f2, var(--blue-dark)); box-shadow: 0 8px 20px -6px rgba(31,111,229,.7); }
-  .btn-light { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
-  .btn-light:hover { background: var(--blue-soft); border-color: var(--blue-light); color: var(--blue); }
-  .btn-ghost { background: transparent; color: var(--muted); padding: 8px 12px; border-radius: 10px; }
-  .btn-ghost:hover { background: var(--surface-2); color: var(--ink); }
-  .btn svg { width: 18px; height: 18px; }
-
-  .side { padding: 22px; display: flex; flex-direction: column; gap: 18px; }
-  .hint { color: var(--muted); font-size: 13px; margin: 4px 0 0; }
-  .manual { display: flex; gap: 8px; }
-  .field { flex: 1; min-width: 0; border: 1px solid var(--line); border-radius: 12px; padding: 11px 14px; background: var(--surface); color: var(--ink); }
-  .field::placeholder { color: var(--muted); opacity: .8; }
-  .field:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 4px var(--blue-soft); }
-  .recent { display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow: auto; margin-top: 10px; }
-  .recent-item { display: flex; gap: 12px; align-items: center; padding: 8px 8px 8px 8px; border-radius: 14px; background: var(--surface-2); font-size: 14px; animation: rise .25s ease; }
-  .recent-item .em { font-size: 22px; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; flex: none; }
-  .recent-item .t { min-width: 0; flex: 1; }
-  .recent-item .t b { display: block; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .recent-item .t small { color: var(--muted); }
-  .demo-codes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-  .chip { border: 1px dashed var(--blue-light); background: var(--blue-soft); color: var(--blue); border-radius: 99px; padding: 5px 11px; font-size: 12px; font-variant-numeric: tabular-nums; transition: transform .15s; }
-  .chip:hover { transform: translateY(-1px); border-style: solid; }
-  .empty-state { text-align: center; padding: 18px 10px; color: var(--muted); font-size: 13px; border: 1px dashed var(--line); border-radius: 14px; }
-
-  /* Browse */
-  .filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-  .search { flex: 1 1 260px; position: relative; }
-  .search svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--muted); }
-  .search .field { width: 100%; padding-left: 42px; }
-  .cats { display: flex; gap: 8px; overflow-x: auto; padding: 14px 0 4px; scrollbar-width: none; }
-  .cats::-webkit-scrollbar { display: none; }
-  .cat { flex: none; border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 8px 16px; font-size: 14px; color: var(--muted); }
-  .cat:hover { color: var(--ink); border-color: var(--blue-light); }
-  .cat.active { background: var(--blue); border-color: var(--blue); color: #fff; box-shadow: 0 6px 14px -6px rgba(31,111,229,.6); }
-
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; margin-top: 16px; }
-  @media (max-width: 480px) { .grid { grid-template-columns: 1fr 1fr; gap: 10px; } .prod { padding: 10px !important; } }
-  .prod { padding: 12px; display: flex; flex-direction: column; gap: 8px; position: relative; }
-  .prod:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-  .prod.selected { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft), var(--shadow); }
-  .prod .thumb { aspect-ratio: 1.35; border-radius: 14px; display: grid; place-items: center; font-size: 48px; position: relative; overflow: hidden; }
-  .prod .thumb span { filter: drop-shadow(0 8px 10px rgba(0,0,0,.15)); transition: transform .25s; }
-  .prod:hover .thumb span { transform: scale(1.1) rotate(-4deg); }
-  .prod .check { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; border-radius: 99px; background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 14px; font-weight: 700; box-shadow: 0 4px 10px rgba(31,111,229,.4); }
-  .prod .meta { color: var(--muted); font-size: 12px; display: flex; justify-content: space-between; gap: 6px; margin-top: 2px; }
-  .prod .stars { color: #f5a524; white-space: nowrap; }
-  .prod .name { font-weight: 600; font-size: 14.5px; line-height: 1.35; min-height: 2.7em; }
-  .prod .price { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; flex-wrap: wrap; }
-  .prod .price b { font-family: "Prompt", sans-serif; font-size: 20px; font-weight: 600; }
-  .prod .price small { color: var(--muted); font-size: 11.5px; background: var(--surface-2); padding: 2px 8px; border-radius: 99px; }
-  .prod .btn { padding: 9px 10px; font-size: 14px; margin-top: auto; }
-  .promo { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #ff6b5e, var(--bad)); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 99px; box-shadow: 0 4px 10px -2px rgba(214,69,61,.5); z-index: 1; }
-  .empty { text-align: center; color: var(--muted); padding: 48px 16px; }
-
-  /* Compare tray */
-  .tray {
-    position: fixed; left: 50%; bottom: 18px; transform: translate(-50%, calc(100% + 80px)); z-index: 30;
-    width: min(680px, calc(100% - 32px));
-    background: var(--tray-bg); color: var(--tray-fg); border-radius: 20px; padding: 10px 10px 10px 12px;
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,.1);
-    display: flex; align-items: center; gap: 12px;
-    box-shadow: 0 16px 40px -8px rgba(15,26,43,.45); transition: transform .35s cubic-bezier(.2,.9,.3,1.2);
-  }
-  .tray.show { transform: translate(-50%, 0); }
-  .tray-items { display: flex; gap: 6px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
-  .tray-items::-webkit-scrollbar { display: none; }
-  .tray-pill { flex: none; width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.12); display: grid; place-items: center; font-size: 20px; animation: pop .25s ease; }
-  @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
-  .tray-count { font-size: 13px; color: #b9c6da; white-space: nowrap; }
-  .tray .btn-primary { white-space: nowrap; }
-
-  /* Compare view */
-  .compare-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
-  .compare-head h2 { margin: 0; font-size: clamp(22px, 3.4vw, 28px); font-weight: 700; flex: 1; }
-  .insights { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-bottom: 18px; }
-  .insight { padding: 16px 18px; display: flex; gap: 14px; align-items: flex-start; position: relative; overflow: hidden; }
-  .insight::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--accent); }
-  .insight .ic { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; font-size: 22px; flex: none; }
-  .insight small { color: var(--accent); display: block; font-size: 12px; font-weight: 600; letter-spacing: .02em; }
-  .insight b { display: block; font-size: 15px; line-height: 1.35; margin: 2px 0; }
-  .insight span { color: var(--muted); font-size: 13px; }
-  .note { background: var(--warn-soft); border: 1px solid var(--note-line); color: var(--note-ink); font-size: 13px; padding: 10px 14px; border-radius: 14px; margin-bottom: 16px; }
-
-  .table-wrap { overflow-x: auto; }
-  table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 14px; }
-  th, td { padding: 13px 16px; border-bottom: 1px solid var(--line); text-align: center; min-width: 160px; vertical-align: middle; font-variant-numeric: tabular-nums; }
-  th:first-child, td:first-child { position: sticky; left: 0; background: var(--card); text-align: left; min-width: 140px; color: var(--muted); font-weight: 500; z-index: 1; box-shadow: 1px 0 0 var(--line); }
-  thead th { background: var(--card); vertical-align: top; padding-top: 20px; padding-bottom: 16px; }
-  tbody tr:not(.group-row):hover td { background: var(--surface-2); }
-  tbody tr:last-child td { border-bottom: 0; }
-  .col-prod { display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; }
-  .col-prod .em { font-size: 34px; width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; }
-  .col-prod b { font-size: 14px; line-height: 1.3; color: var(--ink); }
-  .col-prod small { color: var(--muted); font-weight: 400; }
-  .badges { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; min-height: 22px; }
-  .badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
-  .rm { position: absolute; top: -8px; right: -4px; width: 28px; height: 28px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); display: grid; place-items: center; padding: 0; font-size: 12px; }
-  .rm:hover { color: #fff; background: var(--bad); border-color: var(--bad); }
-  td.best, tbody tr:not(.group-row):hover td.best { background: var(--good-soft); color: var(--good); font-weight: 700; }
-  td.best::after { content: " ✓"; }
-  .group-row td { background: var(--surface-2) !important; font-weight: 600; color: var(--ink) !important; text-align: left; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; padding-top: 9px; padding-bottom: 9px; }
-  .score { display: inline-block; min-width: 46px; padding: 3px 10px; border-radius: 99px; font-weight: 700; }
-
-  /* Toast */
-  .toast { position: fixed; top: 78px; left: 50%; transform: translate(-50%, -20px); opacity: 0; z-index: 50; background: var(--tray-bg); color: var(--tray-fg); padding: 11px 18px; border-radius: 14px; font-size: 14px; pointer-events: none; transition: all .25s; max-width: calc(100% - 32px); box-shadow: 0 10px 30px -8px rgba(0,0,0,.4); backdrop-filter: blur(10px); }
-  .toast.show { opacity: 1; transform: translate(-50%, 0); }
-  .toast.err { background: var(--bad); }
-
-  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
-
-  /* ---------- Minimal layer: neutral greys, one blue accent, hairlines, no ornament ---------- */
-  :root {
-    --bg: #fafafa;
-    --card: #ffffff;
-    --surface: #ffffff;
-    --surface-2: #f2f2f2;
-    --line: #e7e7e7;
-    --ink: #111111;
-    --muted: #767676;
-    --blue: #1f6fe5;
-    --blue-dark: #1556c0;
-    --blue-soft: #eef4fe;
-    --blue-light: #c4dafb;
-    --header-bg: rgba(250,250,250,.9);
-    --tray-bg: #111111;
-    --tray-fg: #fafafa;
-    --tint-milk: #f2f2f2;
-    --tint-drink: #f2f2f2;
-    --tint-snack: #f2f2f2;
-    --tint-noodle: #f2f2f2;
-    --tint-oil: #f2f2f2;
-    --tint-rice: #f2f2f2;
-    --radius: 12px;
-    --shadow: none;
-    --shadow-lg: none;
-  }
-  :root[data-theme="dark"] {
-    --bg: #0a0a0a;
-    --card: #121212;
-    --surface: #121212;
-    --surface-2: #1c1c1c;
-    --line: #262626;
-    --ink: #f2f2f2;
-    --muted: #9a9a9a;
-    --blue: #5b9bff;
-    --blue-dark: #78adff;
-    --blue-soft: #111d33;
-    --blue-light: #284a80;
-    --header-bg: rgba(10,10,10,.9);
-    --tray-bg: #f2f2f2;
-    --tray-fg: #0a0a0a;
-    --tint-milk: #1c1c1c;
-    --tint-drink: #1c1c1c;
-    --tint-snack: #1c1c1c;
-    --tint-noodle: #1c1c1c;
-    --tint-oil: #1c1c1c;
-    --tint-rice: #1c1c1c;
-  }
-
-  body { background: var(--bg); }
-  h1, h2, h3, .brand, .display { font-family: "IBM Plex Sans Thai", system-ui, sans-serif; }
-
-  /* Header */
-  header { border-bottom: 1px solid var(--line); backdrop-filter: blur(8px); }
-  .brand { font-size: 18px; font-weight: 600; }
-  .brand svg { width: 28px; height: 28px; filter: none; }
-  .brand .s { background: none; color: var(--blue); }
-  .tagline { font-size: 13px; }
-  .theme-btn { border: 0; background: transparent; color: var(--muted); }
-  .theme-btn:hover { background: var(--surface-2); color: var(--ink); }
-
-  /* Hero: just type */
-  .hero { background: none; color: var(--ink); box-shadow: none; border-radius: 0; padding: 36px 0 8px; overflow: visible; }
-  .hero::before, .hero::after { display: none; }
-  .hero h1 { font-size: clamp(28px, 4.6vw, 44px); font-weight: 600; letter-spacing: -.02em; line-height: 1.2; margin: 0 0 8px; }
-  .hero p { color: var(--muted); font-size: 16px; margin-bottom: 28px; }
-  @media (max-width: 560px) { .hero { padding: 24px 0 4px; } }
-
-  /* Tabs */
-  .tabs { background: var(--surface-2); border: 0; border-radius: 10px; padding: 3px; gap: 2px; width: min(100%, 380px); }
-  .tab { color: var(--muted); border-radius: 8px; padding: 9px 12px; font-weight: 500; }
-  .tab:hover { color: var(--ink); background: transparent; }
-  .tab.active { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
-  :root[data-theme="dark"] .tab.active { background: #2a2a2a; }
-  .tab svg { opacity: .7; }
-
-  .panel { margin-top: 24px; }
-  .card { box-shadow: none; }
-  .section-title { font-size: 15px; font-weight: 600; }
-  .section-title .dot { display: none; }
-
-  /* Buttons */
-  .btn { border-radius: 10px; font-weight: 500; }
-  .btn-primary { background: var(--ink); color: var(--bg); box-shadow: none; }
-  .btn-primary:hover { background: var(--ink); opacity: .85; box-shadow: none; }
-  .btn-light { background: transparent; }
-  .btn-light:hover { background: var(--surface-2); border-color: var(--line); color: var(--ink); }
-  .field { border-radius: 10px; }
-  .field:focus { border-color: var(--ink); box-shadow: none; }
-  .chip { border: 1px solid var(--line); background: transparent; color: var(--muted); }
-  .chip:hover { transform: none; color: var(--ink); border-color: var(--ink); }
-  .recent-item { background: transparent; border: 1px solid var(--line); border-radius: 10px; }
-  .recent-item .em { border-radius: 8px; }
-
-  /* Scanner */
-  .viewer { background: #111; box-shadow: none; border-radius: var(--radius); }
-  :root[data-theme="dark"] .viewer { background: #161616; border: 1px solid var(--line); }
-  .scan-icon { background: transparent; border: 1px solid rgba(255,255,255,.18); animation: none; border-radius: 18px; width: 72px; height: 72px; }
-  .scan-icon svg { color: #e6e6e6; width: 36px; height: 36px; }
-  .viewer-idle p { color: #a8a8a8; }
-  .scan-frame i { border-color: #fff; border-width: 2px; }
-  .scan-line { background: rgba(255,255,255,.9); box-shadow: none; height: 1px; }
-  .scan-count::before { background: #ef4444; }
-  .viewer .btn-primary, .viewer .btn-primary:hover { background: #fff; color: #111; }
-
-  /* Browse */
-  .cat { padding: 7px 14px; }
-  .cat:hover { border-color: var(--ink); }
-  .cat.active { background: var(--ink); border-color: var(--ink); color: var(--bg); box-shadow: none; }
-  .grid { gap: 12px; }
-  .prod { padding: 10px; gap: 6px; }
-  .prod:hover { transform: none; box-shadow: none; border-color: var(--muted); }
-  .prod.selected { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
-  .prod .thumb { border-radius: 8px; font-size: 42px; }
-  .prod .thumb span { filter: none; }
-  .prod:hover .thumb span { transform: none; }
-  .prod .check { background: var(--ink); color: var(--bg); box-shadow: none; width: 22px; height: 22px; font-size: 12px; }
-  .prod .name { font-size: 14px; font-weight: 500; }
-  .prod .stars { color: var(--muted); }
-  .prod .price b { font-family: inherit; font-size: 17px; font-weight: 600; }
-  .prod .price small { background: none; padding: 0; }
-  .promo { background: var(--surface); color: var(--bad); box-shadow: none; border: 1px solid var(--line); font-weight: 600; }
-
-  /* Tray & toast */
-  .tray { border-radius: 14px; border: 0; backdrop-filter: none; box-shadow: 0 8px 24px -12px rgba(0,0,0,.35); transition: transform .25s ease; }
-  .tray-pill { background: rgba(128,128,128,.18); border: 0; border-radius: 8px; animation: none; }
-  .tray-count { color: inherit; opacity: .6; }
-  .tray .btn-primary { background: var(--tray-fg); color: var(--tray-bg); }
-  .toast { border-radius: 10px; box-shadow: 0 8px 24px -12px rgba(0,0,0,.35); }
-
-  /* Compare */
-  .compare-head h2 { font-size: clamp(22px, 3.2vw, 30px); font-weight: 600; letter-spacing: -.01em; }
-  .insights { gap: 12px; }
-  .insight::before { display: none; }
-  .insight small { color: var(--muted); font-weight: 500; letter-spacing: 0; }
-  .insight b { font-size: 15px; font-weight: 600; }
-  .note { border-radius: 10px; }
-  th, td { padding: 12px 16px; }
-  tbody tr:not(.group-row):hover td { background: transparent; }
-  td.best, tbody tr:not(.group-row):hover td.best { background: var(--blue-soft); color: var(--blue); font-weight: 600; }
-  td.best::after { content: ""; }
-  .group-row td { background: transparent !important; color: var(--muted) !important; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding-top: 18px; padding-bottom: 8px; }
-  .col-prod .em { border-radius: 12px; width: 56px; height: 56px; font-size: 30px; }
-  .col-prod b { font-weight: 600; }
-  .rm:hover { background: var(--ink); border-color: var(--ink); color: var(--bg); }
-
-  /* ---------- Polish layer: clean base + soft colour, depth and motion ---------- */
-  :root {
-    --bg: #f7f8fb;
+    --surface-2: #f2f6fb;
+    --good: #14a35a;
+    --good-soft: #e4f7ec;
+    --bad: #e0483f;
+    --bad-soft: #fdeceb;
+    --warn: #b97800;
+    --warn-soft: #fff5de;
+    --star: #f5a524;
+    --hero-1: #eef5ff;
+    --hero-2: #dce9fd;
     --tint-milk: #eaf2ff;
     --tint-drink: #fff0e5;
     --tint-snack: #fdf4dc;
     --tint-noodle: #fdeae8;
     --tint-oil: #eef6e2;
     --tint-rice: #f1f1f6;
-    --shadow: 0 1px 2px rgba(16,24,40,.04), 0 4px 16px -6px rgba(16,24,40,.08);
-    --shadow-lg: 0 2px 4px rgba(16,24,40,.04), 0 16px 32px -12px rgba(31,111,229,.22);
-    --tray-bg: rgba(17,24,39,.88);
-    --tray-fg: #ffffff;
+    --shadow: 0 1px 2px rgba(16,32,64,.04), 0 6px 20px -8px rgba(16,32,64,.10);
+    --shadow-lg: 0 2px 6px rgba(16,32,64,.05), 0 24px 48px -16px rgba(31,111,229,.28);
+    --radius: 16px;
+    --glow-1: rgba(31,111,229,.20);
+    --glow-2: rgba(90,162,255,.24);
+    --glow-3: rgba(124,92,255,.12);
+    --dots: rgba(31,111,229,.28);
+    color-scheme: light;
   }
   :root[data-theme="dark"] {
-    --bg: #0b0d12;
-    --card: #12151c;
-    --surface: #12151c;
-    --surface-2: #1a1e27;
-    --line: #242a35;
+    --blue: #4b8ef5;
+    --blue-dark: #6aa2ff;
+    --blue-soft: #14223d;
+    --blue-line: #284a80;
+    --ink: #e8eef7;
+    --ink-2: #c3cddc;
+    --muted: #93a0b4;
+    --line: #232b3a;
+    --bg: #0a0d14;
+    --card: #121722;
+    --surface-2: #19202d;
+    --good: #3dd17f;
+    --good-soft: #10301f;
+    --bad: #f06b62;
+    --bad-soft: #3a1a18;
+    --warn: #f2c35a;
+    --warn-soft: #33290f;
+    --hero-1: #0f1830;
+    --hero-2: #12244a;
     --tint-milk: #16233a;
     --tint-drink: #2e2118;
     --tint-snack: #2d2817;
     --tint-noodle: #2f1c1c;
     --tint-oil: #1e2818;
     --tint-rice: #1d1f27;
-    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px -6px rgba(0,0,0,.5);
-    --shadow-lg: 0 2px 4px rgba(0,0,0,.3), 0 16px 32px -12px rgba(0,0,0,.7);
-    --tray-bg: rgba(30,36,48,.9);
-    --tray-fg: #ffffff;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px -8px rgba(0,0,0,.5);
+    --shadow-lg: 0 2px 6px rgba(0,0,0,.3), 0 24px 48px -16px rgba(0,0,0,.7);
+    --glow-1: rgba(75,142,245,.16);
+    --glow-2: rgba(40,90,200,.18);
+    --glow-3: rgba(124,92,255,.10);
+    --dots: rgba(150,180,255,.13);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { margin: 0; }
+  body { font-family: "IBM Plex Sans Thai", system-ui, sans-serif; background:
+      radial-gradient(900px 520px at -5% -5%, var(--glow-1), transparent 65%),
+      radial-gradient(760px 520px at 105% 8%, var(--glow-2), transparent 65%),
+      radial-gradient(900px 600px at 50% 115%, var(--glow-3), transparent 65%),
+      var(--bg);
+    background-attachment: fixed; color: var(--ink); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  h1, h2, h3, .brand, .num { font-family: "Prompt", "IBM Plex Sans Thai", sans-serif; }
+  button { font: inherit; cursor: pointer; color: inherit; }
+  input, select { font: inherit; color: inherit; }
+  a { color: inherit; text-decoration: none; }
+  svg { flex: none; }
+  .hidden { display: none !important; }
+  /* decorative backdrop: dot grid fading out + soft floating blobs */
+  body::before, body::after { content: ""; position: fixed; pointer-events: none; z-index: 0; }
+  body::before { inset: 0; background-image: radial-gradient(var(--dots) 1.5px, transparent 2px); background-size: 22px 22px;
+    -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 35%, transparent 85%); mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 35%, transparent 85%); }
+  body::after { width: 520px; height: 520px; right: -160px; bottom: -180px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, var(--glow-2), transparent 70%); filter: blur(30px); animation: drift 18s ease-in-out infinite alternate; }
+  @keyframes drift { to { transform: translate(-120px, -80px) scale(1.15); } }
+  header, main, .app, footer { position: relative; z-index: 1; }
+  header { z-index: 40; position: sticky; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- Header ---------- */
+  header { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--card) 88%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+  .bar { height: 68px; display: flex; align-items: center; gap: 28px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; }
+  .brand .logo { width: 34px; height: 34px; border-radius: 10px; background: var(--blue); display: grid; place-items: center; box-shadow: 0 6px 14px -6px rgba(31,111,229,.7); }
+  .brand .logo svg { width: 22px; height: 22px; }
+  .nav { display: flex; gap: 6px; }
+  .nav a { position: relative; padding: 8px 12px; border-radius: 10px; font-size: 15px; color: var(--ink-2); font-weight: 500; }
+  .nav a:hover { color: var(--blue); }
+  .nav a.active { color: var(--blue); font-weight: 600; }
+  .nav a.active::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: -15px; height: 2px; background: var(--blue); border-radius: 2px; }
+  .bar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .icon-btn { width: 40px; height: 40px; border-radius: 12px; border: 0; background: transparent; display: grid; place-items: center; color: var(--ink-2); }
+  .icon-btn:hover { background: var(--surface-2); color: var(--blue); }
+  .icon-btn svg { width: 20px; height: 20px; }
+  .theme-sun { display: none; }
+  :root[data-theme="dark"] .theme-sun { display: block; }
+  :root[data-theme="dark"] .theme-moon { display: none; }
+  @media (max-width: 760px) { .nav { display: none; } .bar { gap: 12px; } }
+  @media (max-width: 480px) { .bar-right .btn { display: none; } }
+
+  /* ---------- Buttons ---------- */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; padding: 12px 22px; font-weight: 600; border: 1px solid transparent; transition: background .15s, box-shadow .15s, transform .1s, border-color .15s, color .15s; white-space: nowrap; }
+  .btn:active { transform: translateY(1px); }
+  .btn svg { width: 18px; height: 18px; }
+  .btn-primary { background: var(--blue); color: #fff; box-shadow: 0 8px 18px -8px rgba(31,111,229,.7); }
+  .btn-primary:hover { background: var(--blue-dark); }
+  .btn-primary:disabled { opacity: .45; box-shadow: none; cursor: not-allowed; }
+  .btn-outline { background: var(--card); color: var(--blue); border-color: var(--blue-line); }
+  .btn-outline:hover { background: var(--blue-soft); border-color: var(--blue); }
+  .btn-ghost { background: transparent; color: var(--muted); padding: 8px 12px; }
+  .btn-ghost:hover { color: var(--ink); background: var(--surface-2); }
+  .btn-sm { padding: 8px 12px; font-size: 14px; border-radius: 10px; }
+  .btn-pill { border-radius: 99px; }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .field { width: 100%; border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 12px 14px; outline: none; transition: border-color .15s, box-shadow .15s; }
+  .field:focus { border-color: var(--blue); box-shadow: 0 0 0 4px var(--blue-soft); }
+  .field::placeholder { color: var(--muted); }
+
+  /* ---------- Home ---------- */
+  .hero { margin-top: 24px; border-radius: 28px; overflow: hidden; position: relative; background:
+      radial-gradient(500px 300px at 85% 30%, rgba(255,255,255,.7), transparent 70%),
+      repeating-linear-gradient(180deg, transparent 0 86px, rgba(31,111,229,.05) 86px 92px),
+      linear-gradient(120deg, var(--hero-1), var(--hero-2)); }
+  :root[data-theme="dark"] .hero { background:
+      radial-gradient(500px 300px at 85% 30%, rgba(75,142,245,.18), transparent 70%),
+      repeating-linear-gradient(180deg, transparent 0 86px, rgba(255,255,255,.03) 86px 92px),
+      linear-gradient(120deg, var(--hero-1), var(--hero-2)); }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; align-items: center; gap: 24px; padding: 56px 56px 0; min-height: 440px; }
+  .hero h1 { font-size: clamp(34px, 5vw, 56px); line-height: 1.2; margin: 0 0 18px; font-weight: 700; letter-spacing: -.01em; }
+  .hero h1 .hl { color: var(--blue); }
+  .hero p.lead { font-size: 18px; color: var(--ink-2); line-height: 1.65; margin: 0 0 30px; max-width: 480px; }
+  .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; padding-bottom: 56px; }
+  .hero-cta .btn { padding: 14px 30px; border-radius: 99px; font-size: 16px; }
+
+  .hero-art { position: relative; height: 440px; align-self: end; }
+  .phone { position: absolute; left: 2%; bottom: -60px; width: 250px; height: 480px; border-radius: 40px; background: #0d1422; padding: 12px; transform: rotate(-12deg); box-shadow: 0 40px 60px -20px rgba(15,27,45,.5), inset 0 0 0 2px #2a3446; }
+  .phone-screen { position: relative; height: 100%; border-radius: 30px; overflow: hidden; background: linear-gradient(180deg, #1a2333, #0e1524); }
+  .phone-screen::before { content: ""; position: absolute; top: 10px; left: 50%; width: 80px; height: 22px; transform: translateX(-50%); background: #0d1422; border-radius: 99px; z-index: 2; }
+  .phone-screen .bc { position: absolute; top: 120px; left: 50%; transform: translateX(-50%); width: 170px; padding: 12px 10px 6px; background: #fff; border-radius: 6px; }
+  .phone-screen .bc svg { width: 100%; height: auto; display: block; }
+  .phone-screen .corners { position: absolute; top: 100px; left: 22px; right: 22px; height: 140px; }
+  .corners i { position: absolute; width: 26px; height: 26px; border: 3px solid #fff; }
+  .corners i:nth-child(1) { top: 0; left: 0; border-right: 0; border-bottom: 0; border-top-left-radius: 10px; }
+  .corners i:nth-child(2) { top: 0; right: 0; border-left: 0; border-bottom: 0; border-top-right-radius: 10px; }
+  .corners i:nth-child(3) { bottom: 0; left: 0; border-right: 0; border-top: 0; border-bottom-left-radius: 10px; }
+  .corners i:nth-child(4) { bottom: 0; right: 0; border-left: 0; border-top: 0; border-bottom-right-radius: 10px; }
+  .phone-screen .laser { position: absolute; left: 30px; right: 30px; height: 2px; background: #5aa2ff; box-shadow: 0 0 12px #5aa2ff; top: 110px; animation: laser 2.2s ease-in-out infinite; }
+  @keyframes laser { 0%,100% { top: 110px; } 50% { top: 228px; } }
+  .phone-screen .pill { position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,.2); color: #fff; font-size: 13px; padding: 6px 16px; border-radius: 99px; backdrop-filter: blur(6px); white-space: nowrap; }
+  .spark { position: absolute; left: 0; top: 30px; width: 60px; height: 60px; color: var(--blue); }
+  .float-card { position: absolute; right: -8px; top: 24px; width: 270px; padding: 16px; transform: rotate(3deg); box-shadow: var(--shadow-lg); animation: bob 6s ease-in-out infinite; }
+  @keyframes bob { 0%,100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+  .float-card h4 { margin: 0 0 12px; font-size: 14px; }
+  .float-card .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .float-card .pair div { border: 1px solid var(--line); border-radius: 12px; padding: 10px; font-size: 12px; }
+  .float-card .pair .em { font-size: 34px; height: 60px; display: grid; place-items: center; border-radius: 10px; margin-bottom: 8px; }
+  .float-card .pair b { display: block; font-size: 12px; }
+  .float-card .btn { width: 100%; padding: 10px; font-size: 14px; }
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; padding: 36px 24px 0; min-height: 0; }
+    .hero-art { height: 360px; }
+    .phone { left: 4%; width: 210px; height: 410px; }
+    .float-card { width: 230px; right: 0; }
+    .hero-cta { padding-bottom: 8px; }
+  }
+  @media (max-width: 480px) { .hero { border-radius: 22px; } .phone { left: -6px; } .float-card { width: 200px; top: 40px; } .float-card .pair .em { height: 46px; font-size: 26px; } }
+
+  .features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 32px 8px 8px; }
+  .feature { display: flex; flex-direction: column; gap: 8px; }
+  .feature .ic { width: 52px; height: 52px; border-radius: 14px; border: 1.5px solid var(--blue-line); background: var(--card); color: var(--blue); display: grid; place-items: center; margin-bottom: 8px; }
+  .feature .ic svg { width: 26px; height: 26px; }
+  .feature b { font-size: 17px; font-family: "Prompt", sans-serif; font-weight: 600; }
+  .feature span { color: var(--muted); font-size: 14px; }
+  @media (max-width: 900px) { .features { grid-template-columns: 1fr 1fr; } }
+
+  .section { padding: 64px 0 24px; }
+  .section-head { text-align: center; margin-bottom: 32px; }
+  .section-head h2 { font-size: clamp(26px, 3.4vw, 34px); margin: 0 0 8px; }
+  .section-head p { color: var(--muted); margin: 0; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .step { padding: 26px; position: relative; }
+  .step .n { width: 36px; height: 36px; border-radius: 99px; background: var(--blue); color: #fff; display: grid; place-items: center; font-weight: 700; font-family: "Prompt", sans-serif; margin-bottom: 14px; }
+  .step h3 { margin: 0 0 6px; font-size: 18px; }
+  .step p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+  @media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
+  .about { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; padding: 36px; }
+  .about h2 { margin: 0 0 12px; font-size: 28px; }
+  .about p { color: var(--ink-2); line-height: 1.7; margin: 0 0 10px; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .stat { background: var(--surface-2); border-radius: 14px; padding: 18px; }
+  .stat b { display: block; font-family: "Prompt", sans-serif; font-size: 28px; color: var(--blue); }
+  .stat span { color: var(--muted); font-size: 14px; }
+  @media (max-width: 760px) { .about { grid-template-columns: 1fr; padding: 24px; } }
+  footer { text-align: center; color: var(--muted); font-size: 13px; padding: 40px 0 60px; }
+
+  /* ---------- App shell ---------- */
+  .app { display: grid; grid-template-columns: 236px minmax(0, 1fr); gap: 28px; padding: 28px 20px 120px; max-width: 1200px; margin: 0 auto; }
+  .app > div { min-width: 0; }
+  .side { position: sticky; top: 92px; align-self: start; display: flex; flex-direction: column; gap: 4px; }
+  @media (min-width: 901px) { .side { background: color-mix(in srgb, var(--card) 72%, transparent); border: 1px solid var(--line); border-radius: 18px; padding: 10px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: var(--shadow); } }
+  .side a { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; color: var(--ink-2); font-weight: 500; font-size: 15px; transition: background .15s, color .15s; }
+  .side a svg { width: 20px; height: 20px; }
+  .side a:hover { background: var(--surface-2); }
+  .side a.active { background: var(--blue-soft); color: var(--blue); font-weight: 600; }
+  .side .badge { margin-left: auto; min-width: 22px; height: 22px; padding: 0 7px; border-radius: 99px; background: var(--blue-soft); color: var(--blue); font-size: 12px; font-weight: 700; display: grid; place-items: center; }
+  .side a.active .badge { background: var(--blue); color: #fff; }
+  @media (max-width: 900px) {
+    .app { grid-template-columns: minmax(0, 1fr); gap: 18px; padding-top: 14px; }
+    .side { position: sticky; top: 68px; z-index: 30; flex-direction: row; overflow-x: auto; margin: 0 -20px; padding: 10px 20px; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); scrollbar-width: none; }
+    .side::-webkit-scrollbar { display: none; }
+    .side a { flex: none; padding: 9px 12px; font-size: 14px; white-space: nowrap; }
   }
 
-  body { background:
-    radial-gradient(800px 360px at 15% -80px, rgba(31,111,229,.10), transparent 70%),
-    radial-gradient(600px 320px at 95% 0, rgba(90,162,255,.10), transparent 70%),
-    var(--bg); background-attachment: fixed; }
-  .card { box-shadow: var(--shadow); }
+  .page-head { margin-bottom: 22px; }
+  .page-head h2 { font-size: clamp(24px, 3vw, 30px); margin: 0 0 6px; }
+  .page-head p { margin: 0; color: var(--muted); }
+  .back { display: inline-flex; align-items: center; gap: 4px; color: var(--muted); font-size: 14px; margin-bottom: 10px; }
+  .back:hover { color: var(--blue); }
+  .back svg { width: 16px; height: 16px; }
+  .sub-title { display: flex; align-items: baseline; gap: 8px; margin: 0 0 14px; font-size: 17px; font-weight: 600; font-family: "Prompt", sans-serif; }
+  .sub-title small { font-family: "IBM Plex Sans Thai", sans-serif; color: var(--muted); font-weight: 400; font-size: 13px; }
+  .sub-title .more { margin-left: auto; font-size: 14px; color: var(--blue); font-family: "IBM Plex Sans Thai", sans-serif; font-weight: 500; }
 
-  /* Hero with floating preview */
-  .hero { position: relative; display: flex; align-items: center; gap: 32px; padding: 44px 0 12px; }
-  .hero-inner { flex: 1; }
-  .hero h1 .hl { background: linear-gradient(120deg, #3d8bf7, #1350b8); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  :root[data-theme="dark"] .hero h1 .hl { background-image: linear-gradient(120deg, #8fbcff, #4a8ff5); }
-  .hero-art { position: relative; width: 300px; height: 210px; flex: none; }
-  .mini { position: absolute; display: flex; align-items: center; gap: 12px; width: 230px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-lg); font-size: 13px; animation: float 6s ease-in-out infinite; }
-  .mini > span { width: 42px; height: 42px; border-radius: 12px; background: var(--tint-milk); display: grid; place-items: center; font-size: 22px; flex: none; }
-  .mini b { display: block; font-size: 16px; }
-  .mini small { color: var(--muted); }
-  .mini i { position: absolute; top: -10px; right: 12px; font-style: normal; font-size: 11px; font-weight: 600; color: #fff; background: var(--good); padding: 2px 9px; border-radius: 99px; }
-  .mini.m1 { top: 0; left: 0; transform: rotate(-4deg); opacity: .75; animation-delay: -2s; }
-  .mini.m2 { top: 70px; left: 60px; z-index: 2; border-color: var(--good); box-shadow: 0 0 0 3px var(--good-soft), var(--shadow-lg); }
-  .mini.m3 { top: 146px; left: 10px; transform: rotate(3deg); opacity: .75; animation-delay: -4s; }
-  @keyframes float { 0%,100% { translate: 0 0; } 50% { translate: 0 -6px; } }
-  @media (max-width: 820px) { .hero-art { display: none; } }
+  /* ---------- Scan ---------- */
+  .scan-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px; margin-bottom: 20px; }
+  @media (max-width: 1000px) { .scan-grid { grid-template-columns: 1fr; } }
+  .viewer { position: relative; aspect-ratio: 16/10; border-radius: 16px; overflow: hidden; display: grid; place-items: center; color: #d7e3f5;
+    background: radial-gradient(circle at 50% 45%, rgba(74,143,245,.25), transparent 60%), linear-gradient(160deg, #26364f, #0f1729); }
+  #reader { position: absolute; inset: 0; }
+  #reader video { width: 100% !important; height: 100% !important; object-fit: cover; }
+  .viewer .corners { position: absolute; inset: 20% 18%; z-index: 2; pointer-events: none; }
+  .viewer .demo-bc { width: 52%; padding: 14px 14px 6px; background: #fff; border-radius: 6px; opacity: .92; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+  .viewer .demo-bc svg { display: block; width: 100%; height: auto; }
+  .viewer .laser { position: absolute; left: 20%; right: 20%; height: 2px; background: #5aa2ff; box-shadow: 0 0 12px #5aa2ff; z-index: 2; animation: vlaser 2.2s ease-in-out infinite; }
+  @keyframes vlaser { 0%,100% { top: 24%; } 50% { top: 74%; } }
+  .viewer .shoot { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 3; width: 58px; height: 58px; border-radius: 99px; border: 4px solid rgba(255,255,255,.85); background: var(--blue); color: #fff; display: grid; place-items: center; box-shadow: 0 8px 20px rgba(0,0,0,.35); }
+  .viewer .shoot svg { width: 24px; height: 24px; }
+  .viewer .shoot.stop { background: var(--bad); }
+  .viewer .hint-pill { position: absolute; top: 14px; left: 14px; z-index: 3; font-size: 13px; font-weight: 600; background: rgba(255,255,255,.95); color: #0f1b2d; padding: 6px 12px; border-radius: 99px; display: flex; align-items: center; gap: 6px; }
+  .viewer .hint-pill.live::before { content: ""; width: 8px; height: 8px; border-radius: 99px; background: #e5484d; animation: blink 1.2s infinite; }
+  @keyframes blink { 50% { opacity: .3; } }
+  .viewer.live .demo-bc, .viewer.live .idle-only { display: none; }
+  .manual { display: flex; gap: 8px; margin-top: 14px; }
+  .manual .field { flex: 1; }
+  .demo-codes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; align-items: center; font-size: 13px; color: var(--muted); }
+  .chip { border: 1px dashed var(--blue-line); background: var(--blue-soft); color: var(--blue); border-radius: 99px; padding: 4px 10px; font-size: 12px; font-variant-numeric: tabular-nums; }
+  .chip:hover { border-style: solid; }
+  .scan-card { padding: 18px; }
+  .cat-panel { padding: 20px; }
+  .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .cat-tile { border: 1px solid var(--line); background: var(--card); border-radius: 14px; padding: 16px 8px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); text-align: center; transition: border-color .15s, background .15s, transform .15s; }
+  .cat-tile .ci { font-size: 28px; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 12px; }
+  .cat-tile:hover { border-color: var(--blue); transform: translateY(-2px); }
+  .cat-tile.active { border-color: var(--blue); background: var(--blue-soft); color: var(--blue); font-weight: 600; }
 
-  /* Tabs & buttons */
-  .tabs { background: var(--surface-2); }
-  .tab.active { color: var(--blue); }
-  :root[data-theme="dark"] .tab.active { background: var(--card); }
-  .btn-primary { background: linear-gradient(135deg, #3d8bf7, var(--blue)); color: #fff; box-shadow: 0 6px 14px -6px rgba(31,111,229,.55); }
-  .btn-primary:hover { background: linear-gradient(135deg, #3483f2, var(--blue-dark)); opacity: 1; }
-  .tray .btn-primary { background: linear-gradient(135deg, #3d8bf7, #1f6fe5); color: #fff; }
-  .field:focus { border-color: var(--blue); box-shadow: 0 0 0 4px var(--blue-soft); }
-  .chip:hover { color: var(--blue); border-color: var(--blue); }
-  .section-title .dot { display: inline-block; width: 6px; height: 6px; background: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
+  .selected-card { padding: 20px; }
+  .strip { display: flex; gap: 12px; overflow-x: auto; padding: 8px 2px 4px; scrollbar-width: thin; }
+  .ptile { position: relative; flex: none; width: 150px; border: 1px solid var(--line); border-radius: 14px; padding: 10px; background: var(--card); animation: pop .25s ease; }
+  .ptile .em { height: 76px; border-radius: 10px; display: grid; place-items: center; font-size: 38px; margin-bottom: 8px; }
+  .ptile b { display: block; font-size: 13px; line-height: 1.3; height: 2.6em; overflow: hidden; }
+  .ptile .pr { font-family: "Prompt", sans-serif; font-weight: 600; font-size: 15px; margin-top: 4px; }
+  .ptile .x { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 99px; border: 0; background: var(--card); color: var(--muted); display: grid; place-items: center; box-shadow: var(--shadow); font-size: 12px; }
+  .ptile .x:hover { background: var(--bad); color: #fff; }
+  .ptile .rec { position: absolute; top: 6px; left: 6px; background: var(--blue); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+  .add-tile { flex: none; width: 150px; min-height: 170px; border: 1.5px dashed var(--line); border-radius: 14px; background: transparent; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-size: 13px; }
+  .add-tile span { font-size: 26px; font-weight: 300; line-height: 1; }
+  .add-tile:hover { border-color: var(--blue); color: var(--blue); }
+  .row-end { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  @keyframes pop { from { transform: scale(.92); opacity: 0; } to { transform: none; opacity: 1; } }
 
-  /* Scanner */
-  .viewer { background: radial-gradient(circle at 50% 45%, rgba(74,143,245,.22), transparent 60%), #0d1220; box-shadow: var(--shadow-lg); }
-  .scan-icon { border-color: rgba(143,188,255,.3); background: rgba(74,143,245,.12); animation: pulse 2.4s ease-in-out infinite; }
-  .scan-icon svg { color: #b9d4ff; }
-  .scan-frame i { border-color: #8fbcff; }
-  .scan-line { background: linear-gradient(90deg, transparent, #5aa2ff, transparent); box-shadow: 0 0 12px #5aa2ff; height: 2px; }
-  .recent-item { background: var(--surface); transition: border-color .15s; }
-  .recent-item:hover { border-color: var(--blue-light); }
-
-  /* Browse */
-  .cat:hover { border-color: var(--blue-light); color: var(--ink); }
-  .cat.active { background: var(--blue); border-color: var(--blue); color: #fff; }
-  .prod { animation: rise .35s ease both; }
-  .prod:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--line); }
-  .prod.selected { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft), var(--shadow); }
-  .prod .thumb { border-radius: 10px; }
-  .prod .thumb span { transition: transform .25s; }
+  /* ---------- Browse ---------- */
+  .search { position: relative; margin-bottom: 18px; }
+  .search svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--muted); }
+  .search .field { padding-left: 42px; }
+  .cat-row { display: grid; grid-template-columns: repeat(7, minmax(92px, 1fr)); gap: 10px; margin-bottom: 26px; overflow-x: auto; padding-bottom: 4px; }
+  @media (max-width: 760px) { .cat-row { grid-template-columns: repeat(7, 92px); } }
+  .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .toolbar .sub-title { margin: 0; }
+  .toolbar select { margin-left: auto; width: auto; padding: 8px 12px; border-radius: 10px; font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+  @media (max-width: 480px) { .grid { grid-template-columns: 1fr 1fr; gap: 10px; } }
+  .prod { padding: 12px; display: flex; flex-direction: column; gap: 6px; position: relative; transition: transform .2s, box-shadow .2s, border-color .2s; animation: pop .3s ease both; }
+  .prod:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .prod.selected { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
+  .prod .thumb { aspect-ratio: 1.3; border-radius: 12px; display: grid; place-items: center; font-size: 50px; margin-bottom: 4px; position: relative; }
+  .prod .thumb span { transition: transform .25s; filter: drop-shadow(0 6px 8px rgba(0,0,0,.12)); }
   .prod:hover .thumb span { transform: scale(1.08); }
-  .prod .check { background: var(--blue); color: #fff; }
-  .prod .stars { color: #f5a524; }
-  .prod .price small { background: var(--surface-2); padding: 2px 8px; border-radius: 99px; }
-  .promo { background: var(--bad); color: #fff; border: 0; }
+  .prod .promo { position: absolute; top: 8px; left: 8px; background: var(--bad); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+  .prod .meta { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; gap: 6px; }
+  .prod .meta .st { color: var(--star); white-space: nowrap; }
+  .prod .nm { font-size: 14px; font-weight: 600; line-height: 1.35; min-height: 2.7em; }
+  .prod .pr { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; flex-wrap: wrap; }
+  .prod .pr b { font-family: "Prompt", sans-serif; font-size: 19px; }
+  .prod .pr small { color: var(--muted); font-size: 11.5px; }
+  .prod .btn { margin-top: 6px; padding: 9px; font-size: 14px; border-radius: 10px; }
+  .prod.selected .btn { background: var(--blue-soft); color: var(--blue); box-shadow: none; }
+  .empty { text-align: center; color: var(--muted); padding: 48px 20px; }
+  .empty .big { font-size: 44px; margin-bottom: 10px; }
 
-  /* Tray */
-  .tray { backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; }
-  .tray-pill { background: rgba(255,255,255,.12); animation: pop .25s ease; }
+  /* ---------- Selected list / history ---------- */
+  .list { display: flex; flex-direction: column; gap: 10px; }
+  .lrow { display: flex; align-items: center; gap: 14px; padding: 12px 14px; }
+  .lrow .em { width: 54px; height: 54px; border-radius: 12px; display: grid; place-items: center; font-size: 28px; flex: none; }
+  .lrow .t { flex: 1; min-width: 0; }
+  .lrow .t b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lrow .t small { color: var(--muted); }
+  .lrow .pr { font-family: "Prompt", sans-serif; font-weight: 600; font-size: 17px; text-align: right; }
+  .lrow .pr small { display: block; font-family: "IBM Plex Sans Thai"; font-weight: 400; font-size: 12px; color: var(--muted); }
+  .hist .ems { display: flex; }
+  .hist .ems span { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-size: 20px; border: 2px solid var(--card); margin-left: -8px; }
+  .hist .ems span:first-child { margin-left: 0; }
 
-  /* Compare */
-  .insight { transition: transform .2s, box-shadow .2s; }
-  .insight:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-  td.best, tbody tr:not(.group-row):hover td.best { background: var(--good-soft); color: var(--good); }
-  td.best::after { content: " ✓"; }
-  tbody tr:not(.group-row):hover td { background: var(--surface-2); }
-  .rm:hover { background: var(--bad); border-color: var(--bad); color: #fff; }
+  /* ---------- Compare ---------- */
+  .criteria { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 4px 0 18px; }
+  .criteria .lbl { font-weight: 600; font-size: 14px; margin-right: 6px; }
+  .crit { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--card); border-radius: 99px; padding: 7px 14px; font-size: 14px; color: var(--muted); transition: all .15s; }
+  .crit svg { width: 16px; height: 16px; }
+  .crit.on { border-color: var(--blue-line); background: var(--blue-soft); color: var(--blue); font-weight: 500; }
+  .cmp-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .cmp-grid .summary { order: -1; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 14px; }
+  th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: center; min-width: 150px; vertical-align: middle; font-variant-numeric: tabular-nums; }
+  th:first-child, td:first-child { position: sticky; left: 0; background: var(--card); text-align: left; min-width: 130px; color: var(--muted); font-weight: 500; z-index: 1; }
+  thead th { padding-top: 18px; padding-bottom: 14px; }
+  tbody tr:not(.grp):hover td { background: var(--surface-2); }
+  tbody tr:last-child td { border-bottom: 0; }
+  .col-h { display: flex; flex-direction: column; align-items: center; gap: 4px; position: relative; }
+  .col-h .em { width: 64px; height: 64px; border-radius: 16px; display: grid; place-items: center; font-size: 34px; margin-bottom: 4px; }
+  .col-h b { font-size: 13.5px; color: var(--ink); line-height: 1.3; }
+  .col-h small { color: var(--muted); font-weight: 400; }
+  .col-h .rec { position: absolute; top: -6px; right: 4px; background: var(--blue); color: #fff; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+  td.best, tbody tr:not(.grp):hover td.best { background: var(--good-soft); color: var(--good); font-weight: 700; }
+  .ok { color: var(--good); font-weight: 700; }
+  .grp td { background: var(--surface-2) !important; color: var(--ink) !important; font-weight: 600; font-size: 13px; text-align: left; padding-top: 9px; padding-bottom: 9px; }
+  .score { display: inline-block; min-width: 46px; padding: 3px 10px; border-radius: 99px; font-weight: 700; }
+  .note { background: var(--warn-soft); color: var(--warn); font-size: 13px; padding: 10px 14px; border-radius: 12px; margin-bottom: 14px; }
+
+  .summary { padding: 22px; display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: "head reasons" "ai alt" "ai actions"; gap: 0 28px; align-items: start; }
+  .summary .rec-head { grid-area: head; }
+  .summary .ai-box { grid-area: ai; }
+  .summary .reasons { grid-area: reasons; }
+  .summary .alt { grid-area: alt; }
+  .summary .sum-actions { grid-area: actions; }
+  @media (max-width: 760px) { .summary { grid-template-columns: 1fr; grid-template-areas: "head" "ai" "reasons" "alt" "actions"; } }
+  .rec-head { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 14px; background: var(--blue-soft); margin-bottom: 16px; }
+  .rec-head .em { width: 56px; height: 56px; border-radius: 14px; display: grid; place-items: center; font-size: 30px; background: var(--card); flex: none; }
+  .rec-head small { color: var(--blue); font-weight: 600; font-size: 12px; }
+  .rec-head b { display: block; line-height: 1.3; }
+  .rec-head .pr { font-family: "Prompt", sans-serif; font-weight: 600; color: var(--blue); }
+  .ai-box { border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 16px; }
+  .ai-box .t { display: flex; align-items: center; gap: 8px; color: var(--blue); font-weight: 600; margin-bottom: 8px; }
+  .ai-box .t .ai { width: 28px; height: 28px; border-radius: 99px; background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 13px; }
+  .ai-box p { margin: 0; color: var(--ink-2); font-size: 14px; line-height: 1.7; }
+  .reasons h4 { margin: 0 0 10px; font-size: 15px; }
+  .reasons ul { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .reasons li { display: flex; gap: 10px; font-size: 14px; color: var(--ink-2); line-height: 1.5; }
+  .reasons li::before { content: "✓"; flex: none; width: 20px; height: 20px; border-radius: 99px; background: var(--blue); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; margin-top: 1px; }
+  .alt { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+  .alt div { display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--ink-2); background: var(--surface-2); border-radius: 12px; padding: 10px 12px; }
+  .alt div span { font-size: 18px; }
+  .sum-actions { display: flex; gap: 8px; }
+  .sum-actions .btn-primary { flex: 1; }
+
+  /* ---------- Tray & toast ---------- */
+  .tray { position: fixed; left: 50%; bottom: 18px; transform: translate(-50%, calc(100% + 60px)); z-index: 35; width: min(620px, calc(100% - 32px)); background: rgba(15,27,45,.9); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); color: #fff; border-radius: 18px; padding: 10px 10px 10px 12px; display: flex; align-items: center; gap: 12px; box-shadow: 0 16px 40px -10px rgba(15,27,45,.5); transition: transform .3s cubic-bezier(.2,.9,.3,1.15); }
+  :root[data-theme="dark"] .tray { background: rgba(32,42,60,.92); border: 1px solid rgba(255,255,255,.08); }
+  .tray.show { transform: translate(-50%, 0); }
+  .tray-items { display: flex; gap: 6px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .tray-items span { flex: none; width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,.12); display: grid; place-items: center; font-size: 20px; }
+  .tray .cnt { font-size: 13px; opacity: .7; white-space: nowrap; }
+  .toast { position: fixed; top: 82px; left: 50%; transform: translate(-50%, -16px); opacity: 0; z-index: 60; background: #0f1b2d; color: #fff; padding: 11px 18px; border-radius: 12px; font-size: 14px; pointer-events: none; transition: all .22s; max-width: calc(100% - 32px); box-shadow: 0 10px 30px -8px rgba(0,0,0,.4); }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .toast.err { background: var(--bad); }
+
+  .view { animation: fade .3s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } html { scroll-behavior: auto; } }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="bar">
-    <div class="brand">
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <path d="M18 8 L50 8 L56 16 L24 16 Z" fill="#a9cdfa"/>
-        <path d="M10 22 L24 16 L56 16 L42 22 L24 22 L24 30 L10 30 Z" fill="#5aa2ff" opacity=".9"/>
-        <path d="M10 30 L42 30 L56 44 L42 56 L10 56 L10 48 L38 48 L44 43 L38 38 L10 38 Z" fill="#1f6fe5"/>
-      </svg>
-      <span><span class="s">Shelf</span> Mind</span>
+  <div class="wrap bar">
+    <a class="brand" href="#home">
+      <span class="logo"><svg viewBox="0 0 24 24" fill="none"><path d="M7 4h11l-3 3H9z" fill="#cfe2ff"/><path d="M5 9h12l2 2-2 2H9v2h8l2 2-2 2H5v-4h10l-2-2H5z" fill="#fff"/></svg></span>
+      ShelfMind
+    </a>
+    <nav class="nav">
+      <a href="#home" data-nav="home">หน้าหลัก</a>
+      <a href="#scan" data-nav="app">เปรียบเทียบสินค้า</a>
+      <a href="#browse" data-nav="browse">ร้านค้า</a>
+      <a href="#about" data-nav="about">เกี่ยวกับเรา</a>
+    </nav>
+    <div class="bar-right">
+      <button class="icon-btn" id="searchBtn" aria-label="ค้นหาสินค้า"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+      <button class="icon-btn" id="themeBtn" aria-label="สลับโหมดมืด/สว่าง">
+        <svg class="theme-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+      <a class="btn btn-outline btn-sm btn-pill" href="#scan">เริ่มเปรียบเทียบ</a>
     </div>
-    <div class="tagline">เปรียบเทียบสินค้าในร้าน ก่อนตัดสินใจซื้อ</div>
-    <button class="theme-btn" id="themeBtn" aria-label="สลับโหมดมืด/สว่าง" title="สลับโหมดมืด/สว่าง">
-      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-    </button>
   </div>
 </header>
 
-<main>
-  <!-- Pick view -->
-  <section id="pickView">
-    <div class="hero">
-      <div class="hero-inner">
-      <h1>อยากรู้ว่าชิ้นไหน<span class="hl">คุ้มกว่า?</span></h1>
-      <p>สแกนบาร์โค้ดหรือเลือกสินค้าเอง กี่ชิ้นก็ได้ แล้วกดเปรียบเทียบ</p>
-    <div class="tabs" role="tablist">
-      <button class="tab active" data-tab="scan" role="tab">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M11 8v8M14 8v8M17 8v8"/></svg>
-        สแกนบาร์โค้ด
-      </button>
-      <button class="tab" data-tab="browse" role="tab">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-        เลือกสินค้าเอง
-      </button>
-    </div>
-      </div>
-      <div class="hero-art" aria-hidden="true">
-        <div class="mini m1"><span>🥛</span><div><b>฿49</b><small>฿4.90 / 100 มล.</small></div></div>
-        <div class="mini m2"><span>🥛</span><div><b>฿39</b><small>฿3.90 / 100 มล.</small></div><i>คุ้มสุด</i></div>
-        <div class="mini m3"><span>🥛</span><div><b>฿44</b><small>฿4.89 / 100 มล.</small></div></div>
-      </div>
-    </div>
-
-    <!-- Scan panel -->
-    <div class="panel" id="panel-scan">
-      <div class="scan-wrap">
-        <div class="viewer">
-          <div id="reader"></div>
-          <div class="viewer-idle" id="viewerIdle">
-            <div class="scan-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M11 8v8M14 8v8M17 8v8"/></svg></div>
-            <p>เปิดกล้องแล้วส่องบาร์โค้ดทีละชิ้น<br>ระบบจะเพิ่มเข้ารายการเปรียบเทียบให้อัตโนมัติ</p>
-            <button class="btn btn-primary" id="startScan">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-              เปิดกล้องสแกน
-            </button>
+<!-- ================= HOME ================= -->
+<main id="view-home" class="view">
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <h1>เปรียบเทียบสินค้า<br><span class="hl">ได้ง่ายๆ</span> ในร้านค้า</h1>
+          <p class="lead">สแกนบาร์โค้ด หรือเลือกสินค้าที่สนใจ แล้วให้ ShelfMind ช่วยเปรียบเทียบให้คุณ ทั้งราคาต่อหน่วย โภชนาการ และรีวิว</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#scan">เริ่มใช้งาน</a>
+            <a class="btn btn-outline" href="#how"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>ดูวิธีใช้งาน</a>
           </div>
-          <div class="scan-frame hidden" id="scanFrame"><i></i><i></i><i></i><i></i><div class="scan-line"></div></div>
-          <div class="scan-count hidden" id="scanCount">สแกนแล้ว 0 ชิ้น</div>
-          <button class="btn btn-light stop-btn hidden" id="stopScan">หยุดสแกน</button>
         </div>
+        <div class="hero-art" aria-hidden="true">
+          <svg class="spark" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M30 6v12M12 16l8 8M6 34h12"/></svg>
+          <div class="phone">
+            <div class="phone-screen">
+              <div class="corners"><i></i><i></i><i></i><i></i></div>
+              <div class="bc" id="heroBarcode"></div>
+              <div class="laser"></div>
+              <div class="pill">สแกนบาร์โค้ด</div>
+            </div>
+          </div>
+          <div class="card float-card">
+            <h4>เปรียบเทียบสินค้า</h4>
+            <div class="pair">
+              <div><div class="em" style="background:var(--tint-milk)">🥛</div><b>ฟาร์มสุข นมจืด UHT</b>฿49</div>
+              <div><div class="em" style="background:var(--tint-milk)">🥛</div><b>กรีนซอย นมถั่วเหลือง</b>฿39</div>
+            </div>
+            <a class="btn btn-primary" href="#scan">ดูเปรียบเทียบ</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        <div class="card side">
-          <div>
-            <h3 class="section-title"><span class="dot"></span>พิมพ์เลขบาร์โค้ด</h3>
-            <p class="hint">กรณีกล้องอ่านไม่ได้ หรือบาร์โค้ดเสียหาย</p>
+    <section class="features">
+      <div class="feature"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7 8v8M10 8v8M13 8v8M16 8v8"/></svg></div><b>สแกนบาร์โค้ดได้</b><span>แค่สแกนก็เปรียบเทียบได้ทันที</span></div>
+      <div class="feature"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="11" cy="11" r="4"/><path d="m17 17-3-3"/></svg></div><b>เลือกสินค้าเองได้</b><span>ไม่ต้องสแกน ก็เปรียบเทียบได้</span></div>
+      <div class="feature"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5v14M8 5v14M12 5v6M12 15v4M16 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM16 9v6"/></svg></div><b>สแกนหลายชิ้นได้</b><span>เลือกเทียบได้ไม่จำกัดจำนวน</span></div>
+      <div class="feature"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg></div><b>ข้อมูลจากร้านจริง</b><span>ราคาและโภชนาการของร้าน พร้อมเหตุผลประกอบ</span></div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="section-head"><h2>ใช้งานง่ายใน 3 ขั้นตอน</h2><p>จากชั้นวางสินค้า ถึงการตัดสินใจ ภายในไม่กี่วินาที</p></div>
+      <div class="steps">
+        <div class="card step"><div class="n">1</div><h3>สแกนหรือเลือกสินค้า</h3><p>ส่องกล้องที่บาร์โค้ดทีละชิ้น หรือค้นหาจากหมวดหมู่ เพิ่มได้กี่ชิ้นก็ได้</p></div>
+        <div class="card step"><div class="n">2</div><h3>ดูตารางเปรียบเทียบ</h3><p>เทียบราคา ราคาต่อหน่วย โภชนาการ และรีวิว พร้อมไฮไลต์ค่าที่ดีที่สุด</p></div>
+        <div class="card step"><div class="n">3</div><h3>รับคำแนะนำ</h3><p>ShelfMind สรุปว่าชิ้นไหนเหมาะกับคุณที่สุด พร้อมเหตุผลที่อ่านเข้าใจง่าย</p></div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="card about">
+        <div>
+          <h2>เกี่ยวกับ ShelfMind</h2>
+          <p>ShelfMind คือผู้ช่วยช้อปปิ้งในร้านค้า ที่ช่วยให้ลูกค้าตัดสินใจซื้อได้มั่นใจขึ้น ด้วยการเปรียบเทียบสินค้าบนชั้นวางแบบเห็นภาพชัด</p>
+          <p>ไม่ต้องคำนวณราคาต่อหน่วยเอง ไม่ต้องพลิกอ่านฉลากทีละกล่อง ทุกอย่างสรุปไว้ในหน้าเดียว</p>
+        </div>
+        <div class="stats">
+          <div class="stat"><b class="num" id="statProducts">27</b><span>สินค้าในร้าน</span></div>
+          <div class="stat"><b class="num">6</b><span>หมวดหมู่</span></div>
+          <div class="stat"><b class="num">∞</b><span>ชิ้นที่เทียบได้</span></div>
+          <div class="stat"><b class="num">10+</b><span>เกณฑ์การเปรียบเทียบ</span></div>
+        </div>
+      </div>
+    </section>
+    <footer>© 2026 ShelfMind · ข้อมูลสินค้าในหน้านี้เป็นข้อมูลตัวอย่าง</footer>
+  </div>
+</main>
+
+<!-- ================= APP ================= -->
+<div id="view-app" class="app hidden">
+  <aside class="side">
+    <a href="#scan" data-side="scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7 8v8M10 8v8M13 8v8M16 8v8"/></svg>สแกนบาร์โค้ด</a>
+    <a href="#browse" data-side="browse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg>เลือกสินค้าเอง</a>
+    <a href="#selected" data-side="selected"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>รายการที่เลือก<span class="badge" id="sideCount">0</span></a>
+    <a href="#compare" data-side="compare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>ผลการเปรียบเทียบ</a>
+    <a href="#history" data-side="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>ประวัติการเปรียบเทียบ</a>
+  </aside>
+
+  <div>
+    <!-- Scan -->
+    <section id="page-scan" class="view">
+      <div class="page-head"><h2>สแกนบาร์โค้ดสินค้า</h2><p>สแกนบาร์โค้ดของสินค้าที่ต้องการ หรือพิมพ์เลขบาร์โค้ด สแกนต่อกันได้เรื่อยๆ</p></div>
+      <div class="scan-grid">
+        <div class="card scan-card">
+          <div class="viewer" id="viewer">
+            <div id="reader"></div>
+            <div class="demo-bc idle-only" id="viewerBarcode"></div>
+            <div class="corners"><i></i><i></i><i></i><i></i></div>
+            <div class="laser"></div>
+            <div class="hint-pill" id="scanPill">กดปุ่มกล้องเพื่อเริ่มสแกน</div>
+            <button class="shoot" id="shootBtn" aria-label="เปิดกล้องสแกน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
           </div>
           <form class="manual" id="manualForm">
-            <input class="field" id="manualCode" inputmode="numeric" placeholder="เช่น 8850000000017" autocomplete="off">
+            <input class="field" id="manualCode" inputmode="numeric" placeholder="หรือพิมพ์เลขบาร์โค้ด 13 หลัก" autocomplete="off">
             <button class="btn btn-primary" type="submit">เพิ่ม</button>
           </form>
-          <div>
-            <p class="hint">ลองบาร์โค้ดตัวอย่าง (กดเพื่อจำลองการสแกน)</p>
-            <div class="demo-codes" id="demoCodes"></div>
-          </div>
-          <div>
-            <h3 class="section-title"><span class="dot"></span>สแกนล่าสุด</h3>
-            <div class="recent" id="recent"></div>
-          </div>
+          <div class="demo-codes" id="demoCodes">ลองตัวอย่าง:</div>
+        </div>
+        <div class="card cat-panel">
+          <div class="sub-title">หรือเลือกจากหมวดหมู่</div>
+          <div class="cat-grid" id="scanCats"></div>
         </div>
       </div>
-    </div>
+      <div class="card selected-card">
+        <div class="sub-title">รายการที่เลือก <small id="selCountText">(เลือกได้ไม่จำกัด)</small></div>
+        <div class="strip" id="scanStrip"></div>
+        <div class="row-end"><a class="btn btn-primary" href="#compare" id="goCompare1">ไปยังหน้าเปรียบเทียบ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </div>
+    </section>
 
-    <!-- Browse panel -->
-    <div class="panel hidden" id="panel-browse">
-      <div class="filters">
-        <div class="search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input class="field" id="search" placeholder="ค้นหาชื่อสินค้า ยี่ห้อ หรือบาร์โค้ด">
-        </div>
-        <select class="field" id="sort" style="flex:0 0 auto">
-          <option value="name">เรียงตามชื่อ</option>
+    <!-- Browse -->
+    <section id="page-browse" class="view hidden">
+      <div class="page-head"><h2>เลือกสินค้าที่สนใจ</h2><p>ค้นหาหรือเลือกจากหมวดหมู่สินค้า แล้วเพิ่มไปยังรายการเปรียบเทียบ</p></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input class="field" id="search" placeholder="ค้นหาสินค้า ยี่ห้อ หรือเลขบาร์โค้ด…">
+      </div>
+      <div class="cat-row" id="browseCats"></div>
+      <div class="toolbar">
+        <div class="sub-title" id="gridTitle">สินค้ายอดนิยม</div>
+        <select class="field" id="sort">
+          <option value="rating">ยอดนิยม</option>
           <option value="price">ราคาต่ำ → สูง</option>
           <option value="unit">ราคาต่อหน่วยคุ้มสุด</option>
-          <option value="rating">คะแนนรีวิวสูงสุด</option>
+          <option value="name">ชื่อ ก → ฮ</option>
         </select>
       </div>
-      <div class="cats" id="cats"></div>
       <div class="grid" id="grid"></div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Compare view -->
-  <section id="compareView" class="hidden">
-    <div class="compare-head">
-      <button class="btn btn-light" id="backBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
-        เพิ่มสินค้า
-      </button>
-      <h2 id="compareTitle">เปรียบเทียบสินค้า</h2>
-      <button class="btn btn-ghost" id="clearBtn">ล้างทั้งหมด</button>
-    </div>
-    <div id="compareBody"></div>
-  </section>
-</main>
+    <!-- Selected -->
+    <section id="page-selected" class="view hidden">
+      <div class="page-head"><h2>รายการที่เลือก</h2><p>สินค้าทั้งหมดที่จะนำไปเปรียบเทียบ</p></div>
+      <div id="selectedBody"></div>
+    </section>
+
+    <!-- Compare -->
+    <section id="page-compare" class="view hidden">
+      <a class="back" href="#scan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>กลับ</a>
+      <div class="page-head"><h2>เปรียบเทียบสินค้า</h2><p>เปรียบเทียบได้หลายชิ้น พร้อมดูเหตุผลและคำแนะนำจาก ShelfMind</p></div>
+      <div id="compareBody"></div>
+    </section>
+
+    <!-- History -->
+    <section id="page-history" class="view hidden">
+      <div class="page-head"><h2>ประวัติการเปรียบเทียบ</h2><p>ผลการเปรียบเทียบที่คุณบันทึกไว้ กดเพื่อเปิดดูอีกครั้ง</p></div>
+      <div id="historyBody"></div>
+    </section>
+  </div>
+</div>
 
 <div class="tray" id="tray">
   <div class="tray-items" id="trayItems"></div>
-  <span class="tray-count" id="trayCount"></span>
-  <button class="btn btn-primary" id="compareBtn">เปรียบเทียบ</button>
+  <span class="cnt" id="trayCount"></span>
+  <a class="btn btn-primary btn-sm" href="#compare" id="trayBtn">เปรียบเทียบ</a>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
 // ---------- Store catalogue (demo data) ----------
 // nutrition values are per 100 g / 100 ml
 const CATEGORIES = {
-  milk:    { name: "นม", em: "🥛", tint: "var(--tint-milk)" },
-  drink:   { name: "เครื่องดื่ม", em: "🧃", tint: "var(--tint-drink)" },
-  snack:   { name: "ขนม", em: "🍪", tint: "var(--tint-snack)" },
-  noodle:  { name: "บะหมี่กึ่งสำเร็จรูป", em: "🍜", tint: "var(--tint-noodle)" },
-  oil:     { name: "น้ำมันพืช", em: "🫒", tint: "var(--tint-oil)" },
-  rice:    { name: "ข้าวสาร", em: "🍚", tint: "var(--tint-rice)" },
+  milk:   { name: "นม", em: "🥛", tint: "var(--tint-milk)" },
+  drink:  { name: "เครื่องดื่ม", em: "🧃", tint: "var(--tint-drink)" },
+  snack:  { name: "ขนม", em: "🍪", tint: "var(--tint-snack)" },
+  noodle: { name: "บะหมี่กึ่งฯ", em: "🍜", tint: "var(--tint-noodle)" },
+  oil:    { name: "น้ำมันพืช", em: "🫒", tint: "var(--tint-oil)" },
+  rice:   { name: "ข้าวสาร", em: "🍚", tint: "var(--tint-rice)" },
 };
 
 const RAW = [
@@ -735,149 +647,7 @@ function ean13(body12) {
   const s = body12.split("").reduce((a, d, i) => a + (+d) * (i % 2 ? 3 : 1), 0);
   return body12 + ((10 - (s % 10)) % 10);
 }
-const PRODUCTS = RAW.map((r, i) => {
-  const [cat, brand, name, size, unit, price, kcal, sugar, fat, sodium, protein, rating, promo] = r;
-  return {
-    id: "p" + i,
-    barcode: ean13("885" + String(1000000 + i * 7).padStart(9, "0")),
-    cat, brand, name, size, unit, price, kcal, sugar, fat, sodium, protein, rating, promo,
-    unitPrice: price / size * 100,
-  };
-});
-const BY_CODE = new Map(PRODUCTS.map(p => [p.barcode, p]));
-const BY_ID = new Map(PRODUCTS.map(p => [p.id, p]));
-
-// ---------- State ----------
-let compare = [];
-try { compare = JSON.parse(localStorage.getItem("sm-compare") || "[]").filter(id => BY_ID.has(id)); } catch {}
-let recent = [];
-let currentCat = "all";
-let scanner = null;
-let scanTotal = 0;
-let lastScan = { code: "", t: 0 };
-
-const $ = s => document.querySelector(s);
-const fmt = (n, d = 2) => n.toLocaleString("th-TH", { minimumFractionDigits: d, maximumFractionDigits: d });
-const sizeText = p => p.size >= 1000 ? `${fmt(p.size / 1000, p.size % 1000 ? 1 : 0)} ${p.unit === "ml" ? "ลิตร" : "กก."}` : `${p.size} ${p.unit === "ml" ? "มล." : "ก."}`;
-const unitLabel = p => p.unit === "ml" ? "100 มล." : "100 ก.";
-
-function save() { try { localStorage.setItem("sm-compare", JSON.stringify(compare)); } catch {} }
-
-function toast(msg, err = false) {
-  const t = $("#toast");
-  t.textContent = msg;
-  t.className = "toast show" + (err ? " err" : "");
-  clearTimeout(toast._t);
-  toast._t = setTimeout(() => t.className = "toast", 1800);
-}
-
-function addToCompare(p, silent) {
-  if (compare.includes(p.id)) { if (!silent) toast(`มี "${p.name}" ในรายการแล้ว`); return false; }
-  compare.push(p.id); save(); renderAll();
-  if (!silent) toast(`เพิ่ม ${p.brand} ${p.name} แล้ว`);
-  return true;
-}
-function removeFromCompare(id) { compare = compare.filter(x => x !== id); save(); renderAll(); }
-function toggleCompare(id) { compare.includes(id) ? removeFromCompare(id) : addToCompare(BY_ID.get(id)); }
-
-// ---------- Barcode handling ----------
-function handleCode(code) {
-  code = String(code).trim();
-  const p = BY_CODE.get(code);
-  if (!p) { toast(`ไม่พบสินค้าบาร์โค้ด ${code} ในร้านนี้`, true); return; }
-  recent = [p, ...recent.filter(x => x.id !== p.id)].slice(0, 20);
-  addToCompare(p);
-  renderRecent();
-}
-
-async function startScan() {
-  if (typeof Html5Qrcode === "undefined") { toast("โหลดตัวสแกนไม่สำเร็จ ลองพิมพ์เลขบาร์โค้ดแทน", true); return; }
-  const F = Html5QrcodeSupportedFormats;
-  scanner = new Html5Qrcode("reader", { formatsToSupport: [F.EAN_13, F.EAN_8, F.UPC_A, F.UPC_E, F.CODE_128], verbose: false });
-  try {
-    await scanner.start(
-      { facingMode: "environment" },
-      { fps: 12, qrbox: (w, h) => ({ width: Math.floor(w * .76), height: Math.floor(h * .5) }), aspectRatio: 4 / 3 },
-      code => {
-        const now = Date.now();
-        if (code === lastScan.code && now - lastScan.t < 2500) return;
-        lastScan = { code, t: now };
-        if (navigator.vibrate) navigator.vibrate(60);
-        scanTotal++;
-        $("#scanCount").textContent = `สแกนแล้ว ${scanTotal} ชิ้น`;
-        handleCode(code);
-      },
-      () => {}
-    );
-    $("#viewerIdle").classList.add("hidden");
-    ["#scanFrame", "#scanCount", "#stopScan"].forEach(s => $(s).classList.remove("hidden"));
-  } catch (e) {
-    scanner = null;
-    toast("เปิดกล้องไม่ได้ — ตรวจสอบสิทธิ์การใช้กล้อง หรือพิมพ์เลขบาร์โค้ดแทน", true);
-  }
-}
-async function stopScan() {
-  if (scanner) { try { await scanner.stop(); scanner.clear(); } catch {} scanner = null; }
-  $("#viewerIdle").classList.remove("hidden");
-  ["#scanFrame", "#scanCount", "#stopScan"].forEach(s => $(s).classList.add("hidden"));
-}
-
-// ---------- Rendering ----------
-function renderRecent() {
-  const el = $("#recent");
-  if (!recent.length) { el.innerHTML = '<div class="empty-state">ยังไม่มีสินค้าที่สแกน<br>ส่องบาร์โค้ดหรือกดเลขตัวอย่างด้านบน</div>'; return; }
-  el.innerHTML = recent.map(p => `
-    <div class="recent-item">
-      <div class="em" style="background:${CATEGORIES[p.cat].tint}">${CATEGORIES[p.cat].em}</div>
-      <div class="t"><b>${p.brand} ${p.name}</b><small>${sizeText(p)} · ฿${fmt(p.price, 0)}</small></div>
-      <button class="btn btn-ghost" data-toggle="${p.id}">${compare.includes(p.id) ? "นำออก" : "เพิ่ม"}</button>
-    </div>`).join("");
-}
-
-function renderCats() {
-  const cats = [["all", "ทั้งหมด"], ...Object.entries(CATEGORIES).map(([k, v]) => [k, `${v.em} ${v.name}`])];
-  $("#cats").innerHTML = cats.map(([k, n]) => `<button class="cat ${k === currentCat ? "active" : ""}" data-cat="${k}">${n}</button>`).join("");
-}
-
-function renderGrid() {
-  const q = $("#search").value.trim().toLowerCase();
-  const sort = $("#sort").value;
-  let list = PRODUCTS.filter(p => (currentCat === "all" || p.cat === currentCat) &&
-    (!q || `${p.brand} ${p.name} ${p.barcode} ${CATEGORIES[p.cat].name}`.toLowerCase().includes(q)));
-  const sorters = {
-    name: (a, b) => (a.brand + a.name).localeCompare(b.brand + b.name, "th"),
-    price: (a, b) => a.price - b.price,
-    unit: (a, b) => a.unitPrice - b.unitPrice,
-    rating: (a, b) => b.rating - a.rating,
-  };
-  list.sort(sorters[sort]);
-  if (!list.length) { $("#grid").innerHTML = '<div class="empty" style="grid-column:1/-1">ไม่พบสินค้าที่ค้นหา</div>'; return; }
-  $("#grid").innerHTML = list.map(p => {
-    const on = compare.includes(p.id);
-    const c = CATEGORIES[p.cat];
-    return `
-    <div class="card prod ${on ? "selected" : ""}">
-      ${p.promo ? '<span class="promo">โปรฯ</span>' : ""}
-      <div class="thumb" style="background:${c.tint}"><span>${c.em}</span>${on ? '<div class="check">✓</div>' : ""}</div>
-      <div class="meta"><span>${p.brand} · ${sizeText(p)}</span><span class="stars">★ ${fmt(p.rating, 1)}</span></div>
-      <div class="name">${p.name}</div>
-      <div class="price"><b>฿${fmt(p.price, 0)}</b><small>฿${fmt(p.unitPrice)} / ${unitLabel(p)}</small></div>
-      <button class="btn ${on ? "btn-primary" : "btn-light"}" data-toggle="${p.id}">${on ? "✓ อยู่ในรายการ" : "+ เปรียบเทียบ"}</button>
-    </div>`;
-  }).join("");
-}
-
-function renderTray() {
-  const n = compare.length;
-  $("#tray").classList.toggle("show", n > 0 && $("#compareView").classList.contains("hidden"));
-  $("#trayItems").innerHTML = compare.map(id => `<div class="tray-pill" title="${BY_ID.get(id).name}">${CATEGORIES[BY_ID.get(id).cat].em}</div>`).join("");
-  $("#trayCount").textContent = `${n} ชิ้น`;
-  $("#compareBtn").disabled = n < 2;
-  $("#compareBtn").style.opacity = n < 2 ? .5 : 1;
-  $("#compareBtn").textContent = n < 2 ? "เลือกอีก 1 ชิ้น" : "เปรียบเทียบ";
-}
-
-// health score 0–100: fewer sugar/sodium/sat-fat & more protein = better
+// health score 0–100: fewer sugar/sodium/fat/kcal & more protein = better
 function healthScore(p) {
   let s = 100;
   s -= Math.min(30, p.sugar * 2);
@@ -887,137 +657,417 @@ function healthScore(p) {
   s += Math.min(10, p.protein);
   return Math.max(0, Math.min(100, Math.round(s)));
 }
+const PRODUCTS = RAW.map((r, i) => {
+  const [cat, brand, name, size, unit, price, kcal, sugar, fat, sodium, protein, rating, promo] = r;
+  const p = {
+    id: "p" + i,
+    barcode: ean13("885" + String(1000000 + i * 7).padStart(9, "0")),
+    cat, brand, name, size, unit, price, kcal, sugar, fat, sodium, protein, rating, promo,
+    unitPrice: price / size * 100,
+  };
+  p.health = healthScore(p);
+  return p;
+});
+const BY_CODE = new Map(PRODUCTS.map(p => [p.barcode, p]));
+const BY_ID = new Map(PRODUCTS.map(p => [p.id, p]));
+
+// ---------- State ----------
+function load(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } }
+function store(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
+let compare = load("sm-compare", []).filter(id => BY_ID.has(id));
+let history = load("sm-history", []);
+let currentCat = "all";
+let criteria = { price: true, nutrition: true, review: true, info: true };
+let scanner = null, scanTotal = 0, lastScan = { code: "", t: 0 };
+
+const $ = s => document.querySelector(s);
+const fmt = (n, d = 2) => n.toLocaleString("th-TH", { minimumFractionDigits: d, maximumFractionDigits: d });
+const sizeText = p => p.size >= 1000 ? `${fmt(p.size / 1000, p.size % 1000 ? 1 : 0)} ${p.unit === "ml" ? "ลิตร" : "กก."}` : `${p.size} ${p.unit === "ml" ? "มล." : "ก."}`;
+const unitLabel = p => p.unit === "ml" ? "100 มล." : "100 ก.";
+const full = p => `${p.brand} ${p.name}`;
+const cat = p => CATEGORIES[p.cat];
+
+function toast(msg, err = false) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.className = "toast show" + (err ? " err" : "");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.className = "toast", 1900);
+}
+function save() { store("sm-compare", compare); }
+
+function addToCompare(p) {
+  if (compare.includes(p.id)) { toast(`มี "${p.name}" ในรายการแล้ว`); return; }
+  compare.push(p.id); save(); refresh();
+  toast(`เพิ่ม ${full(p)} แล้ว`);
+}
+function removeFromCompare(id) { compare = compare.filter(x => x !== id); save(); refresh(); }
+function toggleCompare(id) { compare.includes(id) ? removeFromCompare(id) : addToCompare(BY_ID.get(id)); }
+
+// ---------- Barcode drawing (decorative) ----------
+function barcodeSvg(code) {
+  const digits = code.split("").map(Number);
+  const widths = [1, 1, 1];
+  digits.forEach(d => widths.push(d % 3 + 1, (d + 1) % 2 + 1, (d * 7) % 3 + 1, (d + 2) % 2 + 1));
+  widths.push(1, 1, 1);
+  const total = widths.reduce((a, b) => a + b, 0);
+  let x = 0, rects = "";
+  widths.forEach((w, i) => { if (i % 2 === 0) rects += `<rect x="${x}" y="0" width="${w}" height="60" fill="#111"/>`; x += w; });
+  return `<svg viewBox="0 0 ${total} 74" preserveAspectRatio="none">${rects}<text x="${total / 2}" y="72" font-size="11" text-anchor="middle" fill="#111" font-family="monospace" letter-spacing="1.5">${code}</text></svg>`;
+}
+
+// ---------- Scanner ----------
+function handleCode(code) {
+  code = String(code).trim();
+  const p = BY_CODE.get(code);
+  if (!p) { toast(`ไม่พบสินค้าบาร์โค้ด ${code} ในร้านนี้`, true); return; }
+  addToCompare(p);
+}
+async function startScan() {
+  if (typeof Html5Qrcode === "undefined") { toast("โหลดตัวสแกนไม่สำเร็จ ลองพิมพ์เลขบาร์โค้ดแทน", true); return; }
+  const F = Html5QrcodeSupportedFormats;
+  scanner = new Html5Qrcode("reader", { formatsToSupport: [F.EAN_13, F.EAN_8, F.UPC_A, F.UPC_E, F.CODE_128], verbose: false });
+  try {
+    await scanner.start(
+      { facingMode: "environment" },
+      { fps: 12, qrbox: (w, h) => ({ width: Math.floor(w * .64), height: Math.floor(h * .56) }) },
+      code => {
+        const now = Date.now();
+        if (code === lastScan.code && now - lastScan.t < 2500) return;
+        lastScan = { code, t: now };
+        if (navigator.vibrate) navigator.vibrate(60);
+        scanTotal++;
+        $("#scanPill").textContent = `สแกนแล้ว ${scanTotal} ชิ้น`;
+        handleCode(code);
+      },
+      () => {}
+    );
+    $("#viewer").classList.add("live");
+    $("#scanPill").classList.add("live");
+    $("#scanPill").textContent = `สแกนแล้ว ${scanTotal} ชิ้น`;
+    $("#shootBtn").classList.add("stop");
+    $("#shootBtn").innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
+  } catch (e) {
+    scanner = null;
+    toast("เปิดกล้องไม่ได้ — ตรวจสอบสิทธิ์การใช้กล้อง หรือพิมพ์เลขบาร์โค้ดแทน", true);
+  }
+}
+async function stopScan() {
+  if (scanner) { try { await scanner.stop(); scanner.clear(); } catch {} scanner = null; }
+  $("#viewer").classList.remove("live");
+  $("#scanPill").classList.remove("live");
+  $("#scanPill").textContent = "กดปุ่มกล้องเพื่อเริ่มสแกน";
+  $("#shootBtn").classList.remove("stop");
+  $("#shootBtn").innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
+}
+
+// ---------- Shared pieces ----------
+function catTiles(withAll) {
+  const list = (withAll ? [["all", { name: "ทั้งหมด", em: "🛒", tint: "var(--surface-2)" }]] : []).concat(Object.entries(CATEGORIES));
+  return list.map(([k, c]) => `
+    <button class="cat-tile ${withAll && k === currentCat ? "active" : ""}" data-cat="${k}">
+      <span class="ci" style="background:${c.tint}">${c.em}</span>${c.name}
+    </button>`).join("");
+}
+function ptile(p, rec) {
+  return `<div class="ptile">
+    ${rec ? '<span class="rec">แนะนำ</span>' : ""}
+    <button class="x" data-remove="${p.id}" aria-label="นำออก">✕</button>
+    <div class="em" style="background:${cat(p).tint}">${cat(p).em}</div>
+    <b>${full(p)}</b>
+    <div class="pr">฿${fmt(p.price, 0)} <small style="color:var(--muted);font-weight:400;font-size:12px">${sizeText(p)}</small></div>
+  </div>`;
+}
+const addTile = `<a class="add-tile" href="#browse"><span>+</span>เพิ่มสินค้า</a>`;
+
+// ---------- Recommendation ----------
+function analyse(items) {
+  const minUnit = Math.min(...items.map(p => p.unitPrice));
+  items.forEach(p => p.overall = .4 * (minUnit / p.unitPrice) + .3 * (p.health / 100) + .3 * (p.rating / 5));
+  const by = (k, dir) => [...items].sort((a, b) => dir === "min" ? a[k] - b[k] : b[k] - a[k])[0];
+  return {
+    winner: by("overall", "max"),
+    cheapest: by("unitPrice", "min"),
+    priciest: by("unitPrice", "max"),
+    healthiest: by("health", "max"),
+    topRated: by("rating", "max"),
+  };
+}
+
+// ---------- Renderers ----------
+function renderScan() {
+  $("#scanCats").innerHTML = catTiles(false);
+  const items = compare.map(id => BY_ID.get(id));
+  $("#scanStrip").innerHTML = items.map(p => ptile(p)).join("") + addTile;
+  $("#selCountText").textContent = items.length ? `(${items.length} ชิ้น · เลือกได้ไม่จำกัด)` : "(เลือกได้ไม่จำกัด)";
+  $("#goCompare1").classList.toggle("hidden", items.length < 2);
+}
+
+function renderBrowse() {
+  $("#browseCats").innerHTML = catTiles(true);
+  const q = $("#search").value.trim().toLowerCase();
+  const sort = $("#sort").value;
+  let list = PRODUCTS.filter(p => (currentCat === "all" || p.cat === currentCat) &&
+    (!q || `${p.brand} ${p.name} ${p.barcode} ${cat(p).name}`.toLowerCase().includes(q)));
+  const sorters = {
+    rating: (a, b) => b.rating - a.rating,
+    price: (a, b) => a.price - b.price,
+    unit: (a, b) => a.unitPrice - b.unitPrice,
+    name: (a, b) => full(a).localeCompare(full(b), "th"),
+  };
+  list.sort(sorters[sort]);
+  $("#gridTitle").textContent = q ? `ผลการค้นหา (${list.length})` : currentCat === "all" ? "สินค้ายอดนิยม" : CATEGORIES[currentCat].name;
+  if (!list.length) { $("#grid").innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">🔍</div>ไม่พบสินค้าที่ค้นหา</div>'; return; }
+  $("#grid").innerHTML = list.map((p, i) => {
+    const on = compare.includes(p.id);
+    return `<div class="card prod ${on ? "selected" : ""}" style="animation-delay:${Math.min(i, 12) * 25}ms">
+      <div class="thumb" style="background:${cat(p).tint}"><span>${cat(p).em}</span>${p.promo ? '<span class="promo">โปรฯ</span>' : ""}</div>
+      <div class="meta"><span>${p.brand} · ${sizeText(p)}</span><span class="st">★ ${fmt(p.rating, 1)}</span></div>
+      <div class="nm">${p.name}</div>
+      <div class="pr"><b>฿${fmt(p.price, 0)}</b><small>฿${fmt(p.unitPrice)}/${unitLabel(p)}</small></div>
+      <button class="btn btn-primary" data-toggle="${p.id}">${on ? "✓ เลือกแล้ว" : "เพิ่ม"}</button>
+    </div>`;
+  }).join("");
+}
+
+function renderSelected() {
+  const items = compare.map(id => BY_ID.get(id));
+  if (!items.length) {
+    $("#selectedBody").innerHTML = `<div class="card empty"><div class="big">🧺</div>ยังไม่มีสินค้าในรายการ<br><br><a class="btn btn-primary" href="#scan">สแกนบาร์โค้ด</a> <a class="btn btn-outline" href="#browse">เลือกสินค้าเอง</a></div>`;
+    return;
+  }
+  $("#selectedBody").innerHTML = `<div class="list">${items.map(p => `
+    <div class="card lrow">
+      <div class="em" style="background:${cat(p).tint}">${cat(p).em}</div>
+      <div class="t"><b>${full(p)}</b><small>${sizeText(p)} · ${cat(p).name} · ${p.barcode}</small></div>
+      <div class="pr">฿${fmt(p.price, 0)}<small>฿${fmt(p.unitPrice)}/${unitLabel(p)}</small></div>
+      <button class="btn btn-ghost" data-remove="${p.id}">นำออก</button>
+    </div>`).join("")}</div>
+    <div class="row-end">
+      <button class="btn btn-ghost" id="clearAll">ล้างทั้งหมด</button>
+      ${items.length >= 2 ? '<a class="btn btn-primary" href="#compare">ไปยังหน้าเปรียบเทียบ</a>' : '<a class="btn btn-outline" href="#browse">เพิ่มอีกอย่างน้อย 1 ชิ้น</a>'}
+    </div>`;
+}
+
+const CRITERIA = [
+  { key: "price", label: "ราคา", icon: '<path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>' },
+  { key: "nutrition", label: "โภชนาการ", icon: '<path d="M12 21c-4-2-7-6-7-11a5 5 0 0 1 7-4 5 5 0 0 1 7 4c0 5-3 9-7 11z"/>' },
+  { key: "review", label: "รีวิว", icon: '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/>' },
+  { key: "info", label: "ข้อมูลสินค้า", icon: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>' },
+];
 
 function renderCompare() {
   const items = compare.map(id => BY_ID.get(id));
-  $("#compareTitle").textContent = `เปรียบเทียบ ${items.length} ชิ้น`;
   const body = $("#compareBody");
   if (items.length < 2) {
-    body.innerHTML = `<div class="card empty">เลือกสินค้าอย่างน้อย 2 ชิ้นเพื่อเปรียบเทียบ<br><br><button class="btn btn-primary" onclick="showPick()">เพิ่มสินค้า</button></div>`;
+    body.innerHTML = `<div class="card empty"><div class="big">⚖️</div>เลือกสินค้าอย่างน้อย 2 ชิ้นเพื่อเปรียบเทียบ<br><br><a class="btn btn-primary" href="#scan">สแกนบาร์โค้ด</a> <a class="btn btn-outline" href="#browse">เลือกสินค้าเอง</a></div>`;
     return;
   }
-  items.forEach(p => p.health = healthScore(p));
-
+  const a = analyse(items);
+  const w = a.winner;
+  const saving = (a.priciest.unitPrice - a.cheapest.unitPrice) / a.priciest.unitPrice * 100;
   const best = (key, dir) => {
     const vals = items.map(p => p[key]);
-    const target = dir === "min" ? Math.min(...vals) : Math.max(...vals);
-    return vals.every(v => v === target) ? null : target;
+    const t = dir === "min" ? Math.min(...vals) : Math.max(...vals);
+    return vals.every(v => v === t) ? null : t;
   };
-  const pick = (key, dir) => [...items].sort((a, b) => dir === "min" ? a[key] - b[key] : b[key] - a[key])[0];
-
-  const cheapest = pick("unitPrice", "min");
-  const healthiest = pick("health", "max");
-  const topRated = pick("rating", "max");
-  const priciest = pick("unitPrice", "max");
-  const saving = (priciest.unitPrice - cheapest.unitPrice) / priciest.unitPrice * 100;
-
-  const mixedUnits = new Set(items.map(p => p.unit)).size > 1;
-  const mixedCats = new Set(items.map(p => p.cat)).size > 1;
-
-  const insight = (ic, bg, label, p, extra) => `
-    <div class="card insight" style="--accent:${bg.replace("-soft", "")}">
-      <div class="ic" style="background:${bg}">${ic}</div>
-      <div><small>${label}</small><b>${p.brand} ${p.name} ${sizeText(p)}</b><span>${extra}</span></div>
-    </div>`;
-
-  let html = `<div class="insights">
-    ${insight("💰", "var(--good-soft)", "คุ้มค่าที่สุด (ราคาต่อหน่วย)", cheapest, `฿${fmt(cheapest.unitPrice)}/${unitLabel(cheapest)}${saving >= 1 ? ` · ถูกกว่าแพงสุด ${fmt(saving, 0)}%` : ""}`)}
-    ${insight("🥗", "var(--blue-soft)", "ดีต่อสุขภาพที่สุด", healthiest, `คะแนนสุขภาพ ${healthiest.health}/100`)}
-    ${insight("⭐", "var(--warn-soft)", "รีวิวดีที่สุด", topRated, `${fmt(topRated.rating, 1)} / 5`)}
-  </div>`;
-
-  if (mixedCats) html += `<div class="note">สินค้าต่างหมวดกัน${mixedUnits ? " และหน่วยต่างกัน (มล. / ก.)" : ""} — ราคาต่อหน่วยอาจเทียบกันได้ไม่ตรงนัก</div>`;
 
   const rows = [
-    { group: "ราคา" },
-    { label: "ราคา", key: "price", dir: "min", f: p => `฿${fmt(p.price, 0)}` },
-    { label: "ขนาด", f: p => sizeText(p) },
-    { label: "ราคาต่อ 100 หน่วย", key: "unitPrice", dir: "min", f: p => `฿${fmt(p.unitPrice)}` },
-    { label: "โปรโมชั่น", f: p => p.promo ? '<span style="color:var(--bad);font-weight:600">มีโปรฯ</span>' : "–" },
-    { group: "โภชนาการ (ต่อ 100 ก./มล.)" },
-    { label: "พลังงาน", key: "kcal", dir: "min", f: p => `${fmt(p.kcal, 0)} kcal` },
-    { label: "น้ำตาล", key: "sugar", dir: "min", f: p => `${fmt(p.sugar, 1)} ก.` },
-    { label: "ไขมัน", key: "fat", dir: "min", f: p => `${fmt(p.fat, 1)} ก.` },
-    { label: "โซเดียม", key: "sodium", dir: "min", f: p => `${fmt(p.sodium, 0)} มก.` },
-    { label: "โปรตีน", key: "protein", dir: "max", f: p => `${fmt(p.protein, 1)} ก.` },
-    { label: "คะแนนสุขภาพ", key: "health", dir: "max", f: p => {
-      const c = p.health >= 70 ? ["var(--good-soft)", "var(--good)"] : p.health >= 45 ? ["var(--warn-soft)", "var(--warn-ink)"] : ["var(--bad-soft)", "var(--bad)"];
+    { grp: "price", label: "ราคา", key: "price", dir: "min", f: p => `฿${fmt(p.price, 0)}` },
+    { grp: "price", label: "ขนาด", f: p => sizeText(p) },
+    { grp: "price", label: "ราคาต่อ 100 หน่วย", key: "unitPrice", dir: "min", f: p => `฿${fmt(p.unitPrice)}` },
+    { grp: "price", label: "โปรโมชั่น", f: p => p.promo ? '<span class="ok">✓ มีโปรฯ</span>' : '<span style="color:var(--muted)">–</span>' },
+    { grp: "nutrition", label: "พลังงาน", key: "kcal", dir: "min", f: p => `${fmt(p.kcal, 0)} kcal` },
+    { grp: "nutrition", label: "น้ำตาล", key: "sugar", dir: "min", f: p => `${fmt(p.sugar, 1)} ก.` },
+    { grp: "nutrition", label: "ไขมัน", key: "fat", dir: "min", f: p => `${fmt(p.fat, 1)} ก.` },
+    { grp: "nutrition", label: "โซเดียม", key: "sodium", dir: "min", f: p => `${fmt(p.sodium, 0)} มก.` },
+    { grp: "nutrition", label: "โปรตีน", key: "protein", dir: "max", f: p => `${fmt(p.protein, 1)} ก.` },
+    { grp: "nutrition", label: "คะแนนสุขภาพ", key: "health", dir: "max", f: p => {
+      const c = p.health >= 70 ? ["var(--good-soft)", "var(--good)"] : p.health >= 45 ? ["var(--warn-soft)", "var(--warn)"] : ["var(--bad-soft)", "var(--bad)"];
       return `<span class="score" style="background:${c[0]};color:${c[1]}">${p.health}</span>`;
     } },
-    { group: "อื่น ๆ" },
-    { label: "รีวิวลูกค้า", key: "rating", dir: "max", f: p => `★ ${fmt(p.rating, 1)}` },
-    { label: "หมวดหมู่", f: p => CATEGORIES[p.cat].name },
-    { label: "บาร์โค้ด", f: p => `<small style="color:var(--muted)">${p.barcode}</small>` },
+    { grp: "review", label: "คะแนนรีวิว", key: "rating", dir: "max", f: p => `<span style="color:var(--star)">★</span> ${fmt(p.rating, 1)}` },
+    { grp: "info", label: "ยี่ห้อ", f: p => p.brand },
+    { grp: "info", label: "หมวดหมู่", f: p => cat(p).name },
+    { grp: "info", label: "บาร์โค้ด", f: p => `<small style="color:var(--muted)">${p.barcode}</small>` },
   ];
+  const GROUP_NAMES = { price: "ราคา", nutrition: "โภชนาการ (ต่อ 100 ก./มล.)", review: "รีวิว", info: "ข้อมูลสินค้า" };
 
-  html += `<div class="card table-wrap"><table>
-    <thead><tr><th></th>${items.map(p => `
-      <th><div class="col-prod">
-        <button class="rm" data-remove="${p.id}" aria-label="นำออก">✕</button>
-        <div class="em" style="background:${CATEGORIES[p.cat].tint}">${CATEGORIES[p.cat].em}</div>
-        <b>${p.brand} ${p.name}</b><small>${sizeText(p)}</small>
-        <div class="badges">${[
-          p === cheapest && '<span class="badge" style="background:var(--good-soft);color:var(--good)">💰 คุ้มสุด</span>',
-          p === healthiest && '<span class="badge" style="background:var(--blue-soft);color:var(--blue)">🥗 สุขภาพดีสุด</span>',
-          p === topRated && '<span class="badge" style="background:var(--warn-soft);color:var(--warn-ink)">⭐ รีวิวดีสุด</span>',
-        ].filter(Boolean).join("")}</div>
-      </div></th>`).join("")}</tr></thead>
-    <tbody>${rows.map(r => {
-      if (r.group) return `<tr class="group-row"><td colspan="${items.length + 1}">${r.group}</td></tr>`;
+  let tbody = "";
+  CRITERIA.forEach(c => {
+    if (!criteria[c.key]) return;
+    tbody += `<tr class="grp"><td colspan="${items.length + 1}">${GROUP_NAMES[c.key]}</td></tr>`;
+    rows.filter(r => r.grp === c.key).forEach(r => {
       const b = r.key ? best(r.key, r.dir) : null;
-      return `<tr><td>${r.label}</td>${items.map(p => `<td class="${b !== null && p[r.key] === b ? "best" : ""}">${r.f(p)}</td>`).join("")}</tr>`;
-    }).join("")}</tbody>
-  </table></div>`;
+      tbody += `<tr><td>${r.label}</td>${items.map(p => `<td class="${b !== null && p[r.key] === b ? "best" : ""}">${r.f(p)}</td>`).join("")}</tr>`;
+    });
+  });
+  if (!tbody) tbody = `<tr><td colspan="${items.length + 1}" style="text-align:center;padding:30px">เลือกเกณฑ์อย่างน้อย 1 ข้อ</td></tr>`;
 
-  body.innerHTML = html;
+  // reasons why the winner is recommended
+  const reasons = [];
+  if (w === a.cheapest) reasons.push(`ราคาต่อหน่วยถูกที่สุด (฿${fmt(w.unitPrice)}/${unitLabel(w)})${saving >= 1 ? ` ถูกกว่าชิ้นที่แพงสุด ${fmt(saving, 0)}%` : ""}`);
+  if (w === a.healthiest) reasons.push(`คะแนนสุขภาพสูงที่สุด ${w.health}/100`);
+  if (w === a.topRated) reasons.push(`รีวิวจากลูกค้าดีที่สุด ★ ${fmt(w.rating, 1)}`);
+  const minOf = k => Math.min(...items.map(p => p[k]));
+  if (w.sugar === minOf("sugar") && w !== a.healthiest) reasons.push(`น้ำตาลน้อยที่สุดในรายการ (${fmt(w.sugar, 1)} ก.)`);
+  if (w.sodium === minOf("sodium") && w !== a.healthiest) reasons.push(`โซเดียมต่ำที่สุดในรายการ (${fmt(w.sodium, 0)} มก.)`);
+  if (w.promo) reasons.push("กำลังมีโปรโมชั่นอยู่ตอนนี้");
+  if (reasons.length < 2) reasons.push("คะแนนรวมดีที่สุดเมื่อชั่งน้ำหนักทั้งราคา สุขภาพ และรีวิว");
+
+  const alts = [];
+  if (a.cheapest !== w) alts.push(["💰", `ถ้าเน้นประหยัด เลือก <b>${full(a.cheapest)}</b> ราคาต่อหน่วยถูกสุด`]);
+  if (a.healthiest !== w) alts.push(["🥗", `ถ้าเน้นสุขภาพ เลือก <b>${full(a.healthiest)}</b> คะแนน ${a.healthiest.health}/100`]);
+  if (a.topRated !== w && a.topRated !== a.cheapest && a.topRated !== a.healthiest) alts.push(["⭐", `รีวิวดีที่สุดคือ <b>${full(a.topRated)}</b> ★ ${fmt(a.topRated.rating, 1)}`]);
+
+  const summary = `<b>${full(w)}</b> ${sizeText(w)} เหมาะที่สุดในการเปรียบเทียบครั้งนี้ เพราะ${w === a.cheapest ? "คุ้มค่าที่สุดเมื่อคิดเป็นราคาต่อหน่วย" : "ได้คะแนนรวมสูงสุด"}${w === a.healthiest ? " และดีต่อสุขภาพที่สุด" : ""}${a.cheapest !== w ? ` ส่วน ${full(a.cheapest)} เหมาะกับคนที่อยากประหยัดที่สุด` : ""}`;
+
+  const mixed = new Set(items.map(p => p.cat)).size > 1;
+
+  body.innerHTML = `
+    <div class="strip" style="margin-bottom:18px">${items.map(p => ptile(p, p === w)).join("")}${addTile}</div>
+    <div class="criteria">
+      <span class="lbl">เกณฑ์ที่ใช้เปรียบเทียบ</span>
+      ${CRITERIA.map(c => `<button class="crit ${criteria[c.key] ? "on" : ""}" data-crit="${c.key}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${c.icon}</svg>${c.label}</button>`).join("")}
+    </div>
+    ${mixed ? '<div class="note">สินค้าต่างหมวดกัน — ราคาต่อหน่วยและโภชนาการอาจเทียบกันได้ไม่ตรงนัก</div>' : ""}
+    <div class="cmp-grid">
+      <div class="card table-wrap">
+        <table>
+          <thead><tr><th></th>${items.map(p => `
+            <th><div class="col-h">${p === w ? '<span class="rec">แนะนำ</span>' : ""}
+              <div class="em" style="background:${cat(p).tint}">${cat(p).em}</div>
+              <b>${full(p)}</b><small>${sizeText(p)}</small>
+            </div></th>`).join("")}</tr></thead>
+          <tbody>${tbody}</tbody>
+        </table>
+      </div>
+      <aside class="card summary">
+        <div class="rec-head">
+          <div class="em">${cat(w).em}</div>
+          <div><small>★ ShelfMind แนะนำ</small><b>${full(w)}</b><span class="pr">฿${fmt(w.price, 0)}</span> <small style="color:var(--muted);font-weight:400">${sizeText(w)}</small></div>
+        </div>
+        <div class="ai-box">
+          <div class="t"><span class="ai">✦</span>สรุปให้อัตโนมัติ</div>
+          <p>${summary}</p>
+        </div>
+        <div class="reasons">
+          <h4>เหตุผลที่แนะนำ</h4>
+          <ul>${reasons.map(r => `<li>${r}</li>`).join("")}</ul>
+        </div>
+        ${alts.length ? `<div class="alt">${alts.map(([e, t]) => `<div><span>${e}</span><p style="margin:0">${t}</p></div>`).join("")}</div>` : ""}
+        <div class="sum-actions">
+          <button class="btn btn-primary" id="saveBtn">บันทึกผลการเปรียบเทียบ</button>
+          <button class="btn btn-outline" id="shareBtn" aria-label="แชร์"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>แชร์</button>
+        </div>
+      </aside>
+    </div>`;
+  renderCompare.lastText = `ShelfMind แนะนำ: ${full(w)} ${sizeText(w)} ฿${fmt(w.price, 0)}\n` + items.map(p => `• ${full(p)} ${sizeText(p)} ฿${fmt(p.price, 0)} (฿${fmt(p.unitPrice)}/${unitLabel(p)})`).join("\n");
 }
 
-function renderAll() {
-  renderGrid(); renderRecent(); renderTray();
-  if (!$("#compareView").classList.contains("hidden")) renderCompare();
+function renderHistory() {
+  if (!history.length) {
+    $("#historyBody").innerHTML = `<div class="card empty"><div class="big">🕘</div>ยังไม่มีประวัติการเปรียบเทียบ<br>กด "บันทึกผลการเปรียบเทียบ" ในหน้าผลลัพธ์เพื่อเก็บไว้ดูภายหลัง</div>`;
+    return;
+  }
+  $("#historyBody").innerHTML = `<div class="list">${history.map((h, i) => {
+    const items = h.ids.map(id => BY_ID.get(id)).filter(Boolean);
+    const w = BY_ID.get(h.winner);
+    const d = new Date(h.date);
+    return `<div class="card lrow hist">
+      <div class="ems">${items.slice(0, 4).map(p => `<span style="background:${cat(p).tint}">${cat(p).em}</span>`).join("")}</div>
+      <div class="t"><b>${items.length} ชิ้น · แนะนำ ${w ? full(w) : "-"}</b><small>${d.toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "numeric" })} ${d.toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" })}</small></div>
+      <button class="btn btn-outline btn-sm" data-open="${i}">เปิดดู</button>
+      <button class="btn btn-ghost btn-sm" data-del="${i}" aria-label="ลบ">✕</button>
+    </div>`;
+  }).join("")}</div>`;
 }
 
-function showCompare() {
-  stopScan();
-  $("#pickView").classList.add("hidden");
-  $("#compareView").classList.remove("hidden");
-  renderCompare(); renderTray(); window.scrollTo(0, 0);
+function renderChrome() {
+  const n = compare.length;
+  $("#sideCount").textContent = n;
+  $("#trayItems").innerHTML = compare.map(id => `<span>${cat(BY_ID.get(id)).em}</span>`).join("");
+  $("#trayCount").textContent = `${n} ชิ้น`;
+  const page = currentPage();
+  $("#tray").classList.toggle("show", n > 0 && page === "browse");
+  $("#trayBtn").textContent = n < 2 ? "เลือกอีก 1 ชิ้น" : "เปรียบเทียบ";
+  $("#trayBtn").style.pointerEvents = n < 2 ? "none" : "";
+  $("#trayBtn").style.opacity = n < 2 ? .5 : 1;
 }
-function showPick() {
-  $("#compareView").classList.add("hidden");
-  $("#pickView").classList.remove("hidden");
-  renderAll(); window.scrollTo(0, 0);
+
+const PAGES = ["scan", "browse", "selected", "compare", "history"];
+function currentPage() { const h = location.hash.slice(1); return PAGES.includes(h) ? h : (h === "about" || h === "how" ? h : "home"); }
+
+function refresh() {
+  const page = currentPage();
+  if (page === "scan") renderScan();
+  if (page === "browse") renderBrowse();
+  if (page === "selected") renderSelected();
+  if (page === "compare") renderCompare();
+  if (page === "history") renderHistory();
+  renderChrome();
+}
+
+function route() {
+  const page = currentPage();
+  const inApp = PAGES.includes(page);
+  $("#view-home").classList.toggle("hidden", inApp);
+  $("#view-app").classList.toggle("hidden", !inApp);
+  PAGES.forEach(p => $("#page-" + p).classList.toggle("hidden", p !== page));
+  document.querySelectorAll("[data-side]").forEach(a => a.classList.toggle("active", a.dataset.side === page));
+  document.querySelectorAll("[data-nav]").forEach(a => {
+    const n = a.dataset.nav;
+    a.classList.toggle("active", n === "home" ? page === "home" || page === "how" : n === "browse" ? page === "browse" : n === "about" ? page === "about" : inApp && page !== "browse");
+  });
+  if (page !== "scan") stopScan();
+  if (inApp || page === "home") window.scrollTo({ top: 0, behavior: "instant" });
+  else document.getElementById(page)?.scrollIntoView();
+  refresh();
 }
 
 // ---------- Events ----------
-document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
-  document.querySelectorAll(".tab").forEach(x => x.classList.toggle("active", x === t));
-  $("#panel-scan").classList.toggle("hidden", t.dataset.tab !== "scan");
-  $("#panel-browse").classList.toggle("hidden", t.dataset.tab !== "browse");
-  if (t.dataset.tab !== "scan") stopScan();
-}));
+window.addEventListener("hashchange", route);
 document.addEventListener("click", e => {
-  const tg = e.target.closest("[data-toggle]"); if (tg) return toggleCompare(tg.dataset.toggle);
-  const rm = e.target.closest("[data-remove]"); if (rm) return removeFromCompare(rm.dataset.remove);
-  const cat = e.target.closest("[data-cat]"); if (cat) { currentCat = cat.dataset.cat; renderCats(); renderGrid(); }
-  const demo = e.target.closest("[data-code]"); if (demo) handleCode(demo.dataset.code);
+  const t = e.target;
+  const tg = t.closest("[data-toggle]"); if (tg) return toggleCompare(tg.dataset.toggle);
+  const rm = t.closest("[data-remove]"); if (rm) return removeFromCompare(rm.dataset.remove);
+  const ct = t.closest("[data-cat]");
+  if (ct) { currentCat = ct.dataset.cat; if (currentPage() !== "browse") location.hash = "browse"; else renderBrowse(); return; }
+  const code = t.closest("[data-code]"); if (code) return handleCode(code.dataset.code);
+  const cr = t.closest("[data-crit]"); if (cr) { criteria[cr.dataset.crit] = !criteria[cr.dataset.crit]; return renderCompare(); }
+  const op = t.closest("[data-open]");
+  if (op) { compare = history[+op.dataset.open].ids.filter(id => BY_ID.has(id)); save(); location.hash = "compare"; return; }
+  const del = t.closest("[data-del]");
+  if (del) { history.splice(+del.dataset.del, 1); store("sm-history", history); renderHistory(); toast("ลบประวัติแล้ว"); return; }
+  if (t.closest("#clearAll")) { compare = []; save(); refresh(); return; }
+  if (t.closest("#saveBtn")) {
+    const items = compare.map(id => BY_ID.get(id));
+    history.unshift({ date: Date.now(), ids: [...compare], winner: analyse(items).winner.id });
+    history = history.slice(0, 30);
+    store("sm-history", history);
+    toast("บันทึกผลการเปรียบเทียบแล้ว ดูได้ที่ประวัติ");
+    return;
+  }
+  if (t.closest("#shareBtn")) {
+    const text = renderCompare.lastText || "";
+    if (navigator.share) navigator.share({ title: "ผลเปรียบเทียบจาก ShelfMind", text }).catch(() => {});
+    else navigator.clipboard?.writeText(text).then(() => toast("คัดลอกผลการเปรียบเทียบแล้ว"), () => toast("แชร์ไม่สำเร็จ", true));
+    return;
+  }
 });
-$("#startScan").addEventListener("click", startScan);
-$("#stopScan").addEventListener("click", stopScan);
+$("#shootBtn").addEventListener("click", () => scanner ? stopScan() : startScan());
 $("#manualForm").addEventListener("submit", e => {
   e.preventDefault();
   const v = $("#manualCode").value.replace(/\D/g, "");
   if (!v) return;
   handleCode(v); $("#manualCode").value = "";
 });
-$("#search").addEventListener("input", renderGrid);
-$("#sort").addEventListener("change", renderGrid);
-$("#compareBtn").addEventListener("click", () => compare.length >= 2 && showCompare());
-$("#backBtn").addEventListener("click", showPick);
-$("#clearBtn").addEventListener("click", () => { compare = []; save(); showPick(); });
-
-$("#demoCodes").innerHTML = [0, 2, 4, 11, 16, 23].map(i => `<button class="chip" data-code="${PRODUCTS[i].barcode}">${PRODUCTS[i].barcode}</button>`).join("");
-
+$("#search").addEventListener("input", renderBrowse);
+$("#sort").addEventListener("change", renderBrowse);
+$("#searchBtn").addEventListener("click", () => {
+  if (currentPage() !== "browse") location.hash = "browse";
+  setTimeout(() => $("#search").focus(), 60);
+});
 $("#themeBtn").addEventListener("click", () => {
   const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
   document.documentElement.dataset.theme = t;
@@ -1029,8 +1079,12 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
   if (!saved) document.documentElement.dataset.theme = e.matches ? "dark" : "light";
 });
 
-renderCats();
-renderAll();
+// ---------- Init ----------
+$("#heroBarcode").innerHTML = barcodeSvg("8852702556417");
+$("#viewerBarcode").innerHTML = barcodeSvg(PRODUCTS[4].barcode);
+$("#statProducts").textContent = PRODUCTS.length;
+$("#demoCodes").innerHTML += [0, 4, 11, 16, 23].map(i => ` <button class="chip" data-code="${PRODUCTS[i].barcode}" title="${full(PRODUCTS[i])}">${PRODUCTS[i].barcode}</button>`).join("");
+route();
 </script>
 </body>
 </html>

@@ -265,8 +265,30 @@
   #reader { position: absolute; inset: 0; }
   #reader video { width: 100% !important; height: 100% !important; object-fit: cover; }
   .viewer .corners { position: absolute; inset: 20% 18%; z-index: 2; pointer-events: none; }
-  .viewer .demo-bc { width: 52%; padding: 14px 14px 6px; background: #fff; border-radius: 6px; opacity: .92; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
-  .viewer .demo-bc svg { display: block; width: 100%; height: auto; }
+  .viewer::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(rgba(143,188,255,.06) 1px, transparent 1px) 0 0 / 26px 26px, linear-gradient(90deg, rgba(143,188,255,.06) 1px, transparent 1px) 0 0 / 26px 26px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, #000 20%, transparent 80%); mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, #000 20%, transparent 80%); }
+  .viewer .idle { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; padding: 0 20px 40px; }
+  .idle-icon { position: relative; width: 88px; height: 88px; border-radius: 26px; display: grid; place-items: center; margin-bottom: 12px; color: #fff;
+    background: linear-gradient(145deg, rgba(90,162,255,.55), rgba(31,111,229,.35)); border: 1px solid rgba(255,255,255,.25); box-shadow: 0 12px 30px -8px rgba(31,111,229,.7), inset 0 1px 0 rgba(255,255,255,.3); backdrop-filter: blur(6px); }
+  .idle-icon svg { width: 44px; height: 44px; position: relative; }
+  .idle-icon .ring { position: absolute; inset: -1px; border-radius: 26px; border: 2px solid rgba(143,188,255,.6); animation: ring 2.4s ease-out infinite; }
+  .idle-icon .ring.r2 { animation-delay: 1.2s; }
+  @keyframes ring { from { transform: scale(1); opacity: .8; } to { transform: scale(1.6); opacity: 0; } }
+  .viewer .idle b { font-family: "Prompt", sans-serif; font-size: 20px; font-weight: 600; color: #fff; }
+  .viewer .idle span { font-size: 14px; color: #b8c9e6; max-width: 320px; line-height: 1.5; }
+  .viewer:not(.live) .laser { display: none; }
+  @media (max-width: 600px) {
+    .viewer { aspect-ratio: auto; min-height: 360px; }
+    .viewer .corners { inset: 18% 12% 26%; }
+    .idle-icon { width: 72px; height: 72px; border-radius: 22px; }
+    .idle-icon .ring { border-radius: 22px; }
+    .idle-icon svg { width: 36px; height: 36px; }
+    .viewer .idle { padding-bottom: 70px; }
+    .viewer .idle b { font-size: 18px; }
+    .viewer .idle span { font-size: 13px; max-width: 220px; }
+  }
+  .viewer:not(.live) .corners i { border-color: rgba(255,255,255,.55); }
   .viewer .laser { position: absolute; left: 20%; right: 20%; height: 2px; background: #5aa2ff; box-shadow: 0 0 12px #5aa2ff; z-index: 2; animation: vlaser 2.2s ease-in-out infinite; }
   @keyframes vlaser { 0%,100% { top: 24%; } 50% { top: 74%; } }
   .viewer .shoot { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 3; width: 58px; height: 58px; border-radius: 99px; border: 4px solid rgba(255,255,255,.85); background: var(--blue); color: #fff; display: grid; place-items: center; box-shadow: 0 8px 20px rgba(0,0,0,.35); }
@@ -275,7 +297,7 @@
   .viewer .hint-pill { position: absolute; top: 14px; left: 14px; z-index: 3; font-size: 13px; font-weight: 600; background: rgba(255,255,255,.95); color: #0f1b2d; padding: 6px 12px; border-radius: 99px; display: flex; align-items: center; gap: 6px; }
   .viewer .hint-pill.live::before { content: ""; width: 8px; height: 8px; border-radius: 99px; background: #e5484d; animation: blink 1.2s infinite; }
   @keyframes blink { 50% { opacity: .3; } }
-  .viewer.live .demo-bc, .viewer.live .idle-only { display: none; }
+  .viewer.live .idle-only { display: none; }
   .manual { display: flex; gap: 8px; margin-top: 14px; }
   .manual .field { flex: 1; }
   .demo-codes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; align-items: center; font-size: 13px; color: var(--muted); }
@@ -527,10 +549,17 @@
         <div class="card scan-card">
           <div class="viewer" id="viewer">
             <div id="reader"></div>
-            <div class="demo-bc idle-only" id="viewerBarcode"></div>
+            <div class="idle idle-only">
+              <div class="idle-icon">
+                <span class="ring"></span><span class="ring r2"></span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M10 8v8M13.5 8v8M17 8v8"/></svg>
+              </div>
+              <b>พร้อมสแกนแล้ว</b>
+              <span>วางบาร์โค้ดในกรอบ แล้วกดปุ่มกล้อง</span>
+            </div>
             <div class="corners"><i></i><i></i><i></i><i></i></div>
             <div class="laser"></div>
-            <div class="hint-pill" id="scanPill">กดปุ่มกล้องเพื่อเริ่มสแกน</div>
+            <div class="hint-pill" id="scanPill">พร้อมสแกน</div>
             <button class="shoot" id="shootBtn" aria-label="เปิดกล้องสแกน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
           </div>
           <form class="manual" id="manualForm">
@@ -756,7 +785,7 @@ async function stopScan() {
   if (scanner) { try { await scanner.stop(); scanner.clear(); } catch {} scanner = null; }
   $("#viewer").classList.remove("live");
   $("#scanPill").classList.remove("live");
-  $("#scanPill").textContent = "กดปุ่มกล้องเพื่อเริ่มสแกน";
+  $("#scanPill").textContent = "พร้อมสแกน";
   $("#shootBtn").classList.remove("stop");
   $("#shootBtn").innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
 }
@@ -1081,7 +1110,6 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
 
 // ---------- Init ----------
 $("#heroBarcode").innerHTML = barcodeSvg("8852702556417");
-$("#viewerBarcode").innerHTML = barcodeSvg(PRODUCTS[4].barcode);
 $("#statProducts").textContent = PRODUCTS.length;
 $("#demoCodes").innerHTML += [0, 4, 11, 16, 23].map(i => ` <button class="chip" data-code="${PRODUCTS[i].barcode}" title="${full(PRODUCTS[i])}">${PRODUCTS[i].barcode}</button>`).join("");
 route();

@@ -1,0 +1,1036 @@
+
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ShelfMind</title>
+<script>
+  // apply theme before paint: saved choice, else system preference
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem("sm-theme"); } catch (e) {}
+    if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+  :root {
+    --blue: #1f6fe5;
+    --blue-dark: #1556c0;
+    --blue-soft: #e8f1fe;
+    --blue-light: #a9cdfa;
+    --ink: #0f1a2b;
+    --muted: #5b6b82;
+    --line: #e3e9f2;
+    --bg: #f4f7fc;
+    --card: #ffffff;
+    --good: #12a150;
+    --good-soft: #e5f7ed;
+    --bad: #d6453d;
+    --warn-soft: #fff6e0;
+    --warn-ink: #a86b00;
+    --warn: var(--warn-ink);
+    --note-line: #f3dfa5;
+    --note-ink: #7a5a00;
+    --bad-soft: #fde9e7;
+    --surface: #ffffff;
+    --surface-2: #edf2f9;
+    --header-bg: rgba(255,255,255,.8);
+    --tray-bg: rgba(15,26,43,.92);
+    --tray-fg: #ffffff;
+    --glow: rgba(31,111,229,.10);
+    --hero-a: #2b7cf0;
+    --hero-b: #1350b8;
+    --tint-milk: #eaf3ff;
+    --tint-drink: #fff1e6;
+    --tint-snack: #fdf3dc;
+    --tint-noodle: #fde9e7;
+    --tint-oil: #f1f7e3;
+    --tint-rice: #f2f2f5;
+    --radius: 20px;
+    --shadow: 0 1px 2px rgba(15,26,43,.04), 0 8px 24px -8px rgba(15,26,43,.10);
+    --shadow-lg: 0 2px 4px rgba(15,26,43,.04), 0 20px 40px -12px rgba(31,111,229,.25);
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --blue: #4a8ff5;
+    --blue-dark: #3a7de6;
+    --blue-soft: #16294a;
+    --blue-light: #2c5aa0;
+    --ink: #e6edf7;
+    --muted: #93a3bb;
+    --line: #223049;
+    --bg: #0a101c;
+    --card: #111a2b;
+    --good: #3dd17f;
+    --good-soft: #10301f;
+    --bad: #f06b62;
+    --warn-soft: #33290f;
+    --warn-ink: #f2c35a;
+    --note-line: #5a4716;
+    --note-ink: #f2d27a;
+    --bad-soft: #3a1a18;
+    --surface: #111a2b;
+    --surface-2: #18233a;
+    --header-bg: rgba(10,16,28,.75);
+    --tray-bg: rgba(30,43,68,.92);
+    --tray-fg: #ffffff;
+    --glow: rgba(74,143,245,.16);
+    --hero-a: #1d5fcc;
+    --hero-b: #0f2f73;
+    --tint-milk: #172a46;
+    --tint-drink: #3a2616;
+    --tint-snack: #36301a;
+    --tint-noodle: #3a1d1b;
+    --tint-oil: #24301a;
+    --tint-rice: #232836;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -8px rgba(0,0,0,.45);
+    --shadow-lg: 0 2px 4px rgba(0,0,0,.3), 0 20px 40px -12px rgba(0,0,0,.6);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: "IBM Plex Sans Thai", system-ui, sans-serif;
+    background:
+      radial-gradient(900px 420px at 10% -10%, var(--glow), transparent 70%),
+      radial-gradient(700px 380px at 100% 0%, var(--glow), transparent 70%),
+      var(--bg);
+    background-attachment: fixed;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 110px;
+    min-height: 100vh;
+  }
+  h1, h2, h3, .brand, .display { font-family: "Prompt", "IBM Plex Sans Thai", sans-serif; }
+  button { font: inherit; cursor: pointer; }
+  input, select { font: inherit; }
+  body, .card, header, .field, .btn-light, .cat, th, td, .theme-btn { transition: background-color .2s, border-color .2s, color .2s, box-shadow .2s, transform .2s; }
+
+  /* Header */
+  header {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--header-bg); backdrop-filter: saturate(1.6) blur(14px); -webkit-backdrop-filter: saturate(1.6) blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar { max-width: 1120px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 21px; letter-spacing: -.01em; }
+  .brand .s { background: linear-gradient(135deg, #5aa2ff, var(--blue)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .brand svg { width: 36px; height: 36px; filter: drop-shadow(0 4px 8px rgba(31,111,229,.3)); }
+  .tagline { color: var(--muted); font-size: 13px; margin-left: auto; }
+  .theme-btn { margin-left: 8px; width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); display: grid; place-items: center; padding: 0; flex: none; }
+  .theme-btn:hover { background: var(--blue-soft); color: var(--blue); }
+  .theme-btn svg { width: 20px; height: 20px; }
+  .theme-btn .sun { display: none; }
+  :root[data-theme="dark"] .theme-btn .sun { display: block; }
+  :root[data-theme="dark"] .theme-btn .moon { display: none; }
+  @media (max-width: 560px) { .tagline { display: none; } .theme-btn { margin-left: auto; } }
+
+  main { max-width: 1120px; margin: 0 auto; padding: 22px 16px; }
+
+  /* Hero */
+  .hero {
+    position: relative; overflow: hidden;
+    border-radius: 28px; padding: 32px 32px 28px;
+    background: linear-gradient(135deg, var(--hero-a), var(--hero-b));
+    color: #fff; box-shadow: var(--shadow-lg);
+  }
+  .hero::before, .hero::after { content: ""; position: absolute; border-radius: 28px; transform: skewX(-24deg); pointer-events: none; }
+  .hero::before { width: 300px; height: 70px; right: -20px; top: 36px; background: rgba(255,255,255,.14); }
+  .hero::after { width: 380px; height: 110px; right: -70px; top: 122px; background: rgba(255,255,255,.08); }
+  .hero-inner { position: relative; z-index: 1; max-width: 640px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; letter-spacing: .02em; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.25); padding: 4px 12px; border-radius: 99px; }
+  .hero h1 { font-size: clamp(26px, 4.4vw, 40px); line-height: 1.2; margin: 14px 0 8px; font-weight: 700; letter-spacing: -.01em; }
+  .hero p { margin: 0; color: rgba(255,255,255,.85); font-size: 16px; }
+  .features { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 18px 0 22px; font-size: 14px; color: rgba(255,255,255,.92); }
+  .features span { display: inline-flex; align-items: center; gap: 6px; }
+  .features svg { width: 16px; height: 16px; color: #a9e7c4; }
+  @media (max-width: 560px) { .hero { padding: 24px 20px 20px; border-radius: 22px; } .hero::before, .hero::after { opacity: .6; } }
+
+  /* Tabs (inside hero) */
+  .tabs { display: inline-grid; grid-template-columns: 1fr 1fr; gap: 4px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.2); padding: 4px; border-radius: 16px; width: min(100%, 440px); }
+  .tab { border: 0; background: transparent; padding: 11px 12px; border-radius: 12px; font-weight: 600; color: rgba(255,255,255,.85); display: flex; gap: 8px; align-items: center; justify-content: center; transition: background .2s, color .2s; }
+  .tab:hover { color: #fff; background: rgba(255,255,255,.08); }
+  .tab.active { background: #fff; color: var(--hero-b); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+  .tab svg { width: 18px; height: 18px; }
+  .tab { white-space: nowrap; }
+  @media (max-width: 420px) { .tab { font-size: 14px; padding: 10px 6px; gap: 6px; } .tab svg { width: 16px; height: 16px; } }
+
+  .panel { margin-top: 20px; animation: rise .3s ease; }
+  @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .hidden { display: none !important; }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .section-title { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 16px; font-weight: 600; }
+  .section-title .dot { width: 8px; height: 8px; border-radius: 99px; background: var(--blue); box-shadow: 0 0 0 4px var(--blue-soft); }
+
+  /* Scanner */
+  .scan-wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px; }
+  @media (max-width: 820px) { .scan-wrap { grid-template-columns: 1fr; } }
+  .viewer {
+    position: relative; aspect-ratio: 4/3; border-radius: var(--radius); overflow: hidden; display: grid; place-items: center; color: #c9d6ea;
+    background:
+      radial-gradient(circle at 50% 40%, rgba(74,143,245,.25), transparent 60%),
+      linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px) 0 0 / 28px 28px,
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px) 0 0 / 28px 28px,
+      #0a1222;
+    box-shadow: var(--shadow-lg);
+  }
+  #reader { position: absolute; inset: 0; }
+  #reader video { width: 100% !important; height: 100% !important; object-fit: cover; }
+  .viewer-idle { position: relative; z-index: 1; text-align: center; padding: 20px; }
+  .scan-icon { width: 84px; height: 84px; margin: 0 auto; border-radius: 24px; display: grid; place-items: center; background: rgba(74,143,245,.15); border: 1px solid rgba(169,205,250,.25); animation: pulse 2.4s ease-in-out infinite; }
+  .scan-icon svg { width: 44px; height: 44px; color: #a9cdfa; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(74,143,245,.35); } 50% { box-shadow: 0 0 0 14px rgba(74,143,245,0); } }
+  .viewer-idle p { margin: 16px 0 20px; font-size: 14px; line-height: 1.6; color: #b8c7de; }
+  .scan-frame { position: absolute; inset: 24% 12%; z-index: 2; pointer-events: none; box-shadow: 0 0 0 999px rgba(0,0,0,.35); border-radius: 14px; }
+  .scan-frame i { position: absolute; width: 28px; height: 28px; border: 3px solid #5aa2ff; }
+  .scan-frame i:nth-child(1) { top: 0; left: 0; border-right: 0; border-bottom: 0; border-top-left-radius: 14px; }
+  .scan-frame i:nth-child(2) { top: 0; right: 0; border-left: 0; border-bottom: 0; border-top-right-radius: 14px; }
+  .scan-frame i:nth-child(3) { bottom: 0; left: 0; border-right: 0; border-top: 0; border-bottom-left-radius: 14px; }
+  .scan-frame i:nth-child(4) { bottom: 0; right: 0; border-left: 0; border-top: 0; border-bottom-right-radius: 14px; }
+  .scan-line { position: absolute; left: 6%; right: 6%; height: 2px; background: linear-gradient(90deg, transparent, #5aa2ff, transparent); box-shadow: 0 0 14px #5aa2ff; animation: sweep 2s ease-in-out infinite; }
+  @keyframes sweep { 0%,100% { top: 10%; } 50% { top: 88%; } }
+  .scan-count { position: absolute; top: 14px; left: 14px; z-index: 3; background: rgba(255,255,255,.95); color: #0f1a2b; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 99px; display: flex; align-items: center; gap: 6px; }
+  .scan-count::before { content: ""; width: 8px; height: 8px; border-radius: 99px; background: #e5484d; animation: blink 1.2s infinite; }
+  @keyframes blink { 50% { opacity: .3; } }
+  .stop-btn { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); z-index: 3; }
+
+  .btn { border: 0; border-radius: 12px; padding: 11px 18px; font-weight: 600; display: inline-flex; gap: 8px; align-items: center; justify-content: center; transition: background .15s, transform .1s, box-shadow .15s; }
+  .btn:active { transform: translateY(1px) scale(.99); }
+  .btn-primary { background: linear-gradient(135deg, #3d8bf7, var(--blue)); color: #fff; box-shadow: 0 6px 16px -6px rgba(31,111,229,.6); }
+  .btn-primary:hover { background: linear-gradient(135deg, #3483f2, var(--blue-dark)); box-shadow: 0 8px 20px -6px rgba(31,111,229,.7); }
+  .btn-light { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+  .btn-light:hover { background: var(--blue-soft); border-color: var(--blue-light); color: var(--blue); }
+  .btn-ghost { background: transparent; color: var(--muted); padding: 8px 12px; border-radius: 10px; }
+  .btn-ghost:hover { background: var(--surface-2); color: var(--ink); }
+  .btn svg { width: 18px; height: 18px; }
+
+  .side { padding: 22px; display: flex; flex-direction: column; gap: 18px; }
+  .hint { color: var(--muted); font-size: 13px; margin: 4px 0 0; }
+  .manual { display: flex; gap: 8px; }
+  .field { flex: 1; min-width: 0; border: 1px solid var(--line); border-radius: 12px; padding: 11px 14px; background: var(--surface); color: var(--ink); }
+  .field::placeholder { color: var(--muted); opacity: .8; }
+  .field:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 4px var(--blue-soft); }
+  .recent { display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow: auto; margin-top: 10px; }
+  .recent-item { display: flex; gap: 12px; align-items: center; padding: 8px 8px 8px 8px; border-radius: 14px; background: var(--surface-2); font-size: 14px; animation: rise .25s ease; }
+  .recent-item .em { font-size: 22px; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; flex: none; }
+  .recent-item .t { min-width: 0; flex: 1; }
+  .recent-item .t b { display: block; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .recent-item .t small { color: var(--muted); }
+  .demo-codes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .chip { border: 1px dashed var(--blue-light); background: var(--blue-soft); color: var(--blue); border-radius: 99px; padding: 5px 11px; font-size: 12px; font-variant-numeric: tabular-nums; transition: transform .15s; }
+  .chip:hover { transform: translateY(-1px); border-style: solid; }
+  .empty-state { text-align: center; padding: 18px 10px; color: var(--muted); font-size: 13px; border: 1px dashed var(--line); border-radius: 14px; }
+
+  /* Browse */
+  .filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .search { flex: 1 1 260px; position: relative; }
+  .search svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--muted); }
+  .search .field { width: 100%; padding-left: 42px; }
+  .cats { display: flex; gap: 8px; overflow-x: auto; padding: 14px 0 4px; scrollbar-width: none; }
+  .cats::-webkit-scrollbar { display: none; }
+  .cat { flex: none; border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 8px 16px; font-size: 14px; color: var(--muted); }
+  .cat:hover { color: var(--ink); border-color: var(--blue-light); }
+  .cat.active { background: var(--blue); border-color: var(--blue); color: #fff; box-shadow: 0 6px 14px -6px rgba(31,111,229,.6); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; margin-top: 16px; }
+  @media (max-width: 480px) { .grid { grid-template-columns: 1fr 1fr; gap: 10px; } .prod { padding: 10px !important; } }
+  .prod { padding: 12px; display: flex; flex-direction: column; gap: 8px; position: relative; }
+  .prod:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .prod.selected { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft), var(--shadow); }
+  .prod .thumb { aspect-ratio: 1.35; border-radius: 14px; display: grid; place-items: center; font-size: 48px; position: relative; overflow: hidden; }
+  .prod .thumb span { filter: drop-shadow(0 8px 10px rgba(0,0,0,.15)); transition: transform .25s; }
+  .prod:hover .thumb span { transform: scale(1.1) rotate(-4deg); }
+  .prod .check { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; border-radius: 99px; background: var(--blue); color: #fff; display: grid; place-items: center; font-size: 14px; font-weight: 700; box-shadow: 0 4px 10px rgba(31,111,229,.4); }
+  .prod .meta { color: var(--muted); font-size: 12px; display: flex; justify-content: space-between; gap: 6px; margin-top: 2px; }
+  .prod .stars { color: #f5a524; white-space: nowrap; }
+  .prod .name { font-weight: 600; font-size: 14.5px; line-height: 1.35; min-height: 2.7em; }
+  .prod .price { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; flex-wrap: wrap; }
+  .prod .price b { font-family: "Prompt", sans-serif; font-size: 20px; font-weight: 600; }
+  .prod .price small { color: var(--muted); font-size: 11.5px; background: var(--surface-2); padding: 2px 8px; border-radius: 99px; }
+  .prod .btn { padding: 9px 10px; font-size: 14px; margin-top: auto; }
+  .promo { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #ff6b5e, var(--bad)); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 99px; box-shadow: 0 4px 10px -2px rgba(214,69,61,.5); z-index: 1; }
+  .empty { text-align: center; color: var(--muted); padding: 48px 16px; }
+
+  /* Compare tray */
+  .tray {
+    position: fixed; left: 50%; bottom: 18px; transform: translate(-50%, calc(100% + 80px)); z-index: 30;
+    width: min(680px, calc(100% - 32px));
+    background: var(--tray-bg); color: var(--tray-fg); border-radius: 20px; padding: 10px 10px 10px 12px;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.1);
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 16px 40px -8px rgba(15,26,43,.45); transition: transform .35s cubic-bezier(.2,.9,.3,1.2);
+  }
+  .tray.show { transform: translate(-50%, 0); }
+  .tray-items { display: flex; gap: 6px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .tray-items::-webkit-scrollbar { display: none; }
+  .tray-pill { flex: none; width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.12); display: grid; place-items: center; font-size: 20px; animation: pop .25s ease; }
+  @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+  .tray-count { font-size: 13px; color: #b9c6da; white-space: nowrap; }
+  .tray .btn-primary { white-space: nowrap; }
+
+  /* Compare view */
+  .compare-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+  .compare-head h2 { margin: 0; font-size: clamp(22px, 3.4vw, 28px); font-weight: 700; flex: 1; }
+  .insights { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-bottom: 18px; }
+  .insight { padding: 16px 18px; display: flex; gap: 14px; align-items: flex-start; position: relative; overflow: hidden; }
+  .insight::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--accent); }
+  .insight .ic { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; font-size: 22px; flex: none; }
+  .insight small { color: var(--accent); display: block; font-size: 12px; font-weight: 600; letter-spacing: .02em; }
+  .insight b { display: block; font-size: 15px; line-height: 1.35; margin: 2px 0; }
+  .insight span { color: var(--muted); font-size: 13px; }
+  .note { background: var(--warn-soft); border: 1px solid var(--note-line); color: var(--note-ink); font-size: 13px; padding: 10px 14px; border-radius: 14px; margin-bottom: 16px; }
+
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 14px; }
+  th, td { padding: 13px 16px; border-bottom: 1px solid var(--line); text-align: center; min-width: 160px; vertical-align: middle; font-variant-numeric: tabular-nums; }
+  th:first-child, td:first-child { position: sticky; left: 0; background: var(--card); text-align: left; min-width: 140px; color: var(--muted); font-weight: 500; z-index: 1; box-shadow: 1px 0 0 var(--line); }
+  thead th { background: var(--card); vertical-align: top; padding-top: 20px; padding-bottom: 16px; }
+  tbody tr:not(.group-row):hover td { background: var(--surface-2); }
+  tbody tr:last-child td { border-bottom: 0; }
+  .col-prod { display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; }
+  .col-prod .em { font-size: 34px; width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; }
+  .col-prod b { font-size: 14px; line-height: 1.3; color: var(--ink); }
+  .col-prod small { color: var(--muted); font-weight: 400; }
+  .badges { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; min-height: 22px; }
+  .badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+  .rm { position: absolute; top: -8px; right: -4px; width: 28px; height: 28px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); display: grid; place-items: center; padding: 0; font-size: 12px; }
+  .rm:hover { color: #fff; background: var(--bad); border-color: var(--bad); }
+  td.best, tbody tr:not(.group-row):hover td.best { background: var(--good-soft); color: var(--good); font-weight: 700; }
+  td.best::after { content: " ✓"; }
+  .group-row td { background: var(--surface-2) !important; font-weight: 600; color: var(--ink) !important; text-align: left; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; padding-top: 9px; padding-bottom: 9px; }
+  .score { display: inline-block; min-width: 46px; padding: 3px 10px; border-radius: 99px; font-weight: 700; }
+
+  /* Toast */
+  .toast { position: fixed; top: 78px; left: 50%; transform: translate(-50%, -20px); opacity: 0; z-index: 50; background: var(--tray-bg); color: var(--tray-fg); padding: 11px 18px; border-radius: 14px; font-size: 14px; pointer-events: none; transition: all .25s; max-width: calc(100% - 32px); box-shadow: 0 10px 30px -8px rgba(0,0,0,.4); backdrop-filter: blur(10px); }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .toast.err { background: var(--bad); }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+  /* ---------- Minimal layer: neutral greys, one blue accent, hairlines, no ornament ---------- */
+  :root {
+    --bg: #fafafa;
+    --card: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #f2f2f2;
+    --line: #e7e7e7;
+    --ink: #111111;
+    --muted: #767676;
+    --blue: #1f6fe5;
+    --blue-dark: #1556c0;
+    --blue-soft: #eef4fe;
+    --blue-light: #c4dafb;
+    --header-bg: rgba(250,250,250,.9);
+    --tray-bg: #111111;
+    --tray-fg: #fafafa;
+    --tint-milk: #f2f2f2;
+    --tint-drink: #f2f2f2;
+    --tint-snack: #f2f2f2;
+    --tint-noodle: #f2f2f2;
+    --tint-oil: #f2f2f2;
+    --tint-rice: #f2f2f2;
+    --radius: 12px;
+    --shadow: none;
+    --shadow-lg: none;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0a0a0a;
+    --card: #121212;
+    --surface: #121212;
+    --surface-2: #1c1c1c;
+    --line: #262626;
+    --ink: #f2f2f2;
+    --muted: #9a9a9a;
+    --blue: #5b9bff;
+    --blue-dark: #78adff;
+    --blue-soft: #111d33;
+    --blue-light: #284a80;
+    --header-bg: rgba(10,10,10,.9);
+    --tray-bg: #f2f2f2;
+    --tray-fg: #0a0a0a;
+    --tint-milk: #1c1c1c;
+    --tint-drink: #1c1c1c;
+    --tint-snack: #1c1c1c;
+    --tint-noodle: #1c1c1c;
+    --tint-oil: #1c1c1c;
+    --tint-rice: #1c1c1c;
+  }
+
+  body { background: var(--bg); }
+  h1, h2, h3, .brand, .display { font-family: "IBM Plex Sans Thai", system-ui, sans-serif; }
+
+  /* Header */
+  header { border-bottom: 1px solid var(--line); backdrop-filter: blur(8px); }
+  .brand { font-size: 18px; font-weight: 600; }
+  .brand svg { width: 28px; height: 28px; filter: none; }
+  .brand .s { background: none; color: var(--blue); }
+  .tagline { font-size: 13px; }
+  .theme-btn { border: 0; background: transparent; color: var(--muted); }
+  .theme-btn:hover { background: var(--surface-2); color: var(--ink); }
+
+  /* Hero: just type */
+  .hero { background: none; color: var(--ink); box-shadow: none; border-radius: 0; padding: 36px 0 8px; overflow: visible; }
+  .hero::before, .hero::after { display: none; }
+  .hero h1 { font-size: clamp(28px, 4.6vw, 44px); font-weight: 600; letter-spacing: -.02em; line-height: 1.2; margin: 0 0 8px; }
+  .hero p { color: var(--muted); font-size: 16px; margin-bottom: 28px; }
+  @media (max-width: 560px) { .hero { padding: 24px 0 4px; } }
+
+  /* Tabs */
+  .tabs { background: var(--surface-2); border: 0; border-radius: 10px; padding: 3px; gap: 2px; width: min(100%, 380px); }
+  .tab { color: var(--muted); border-radius: 8px; padding: 9px 12px; font-weight: 500; }
+  .tab:hover { color: var(--ink); background: transparent; }
+  .tab.active { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+  :root[data-theme="dark"] .tab.active { background: #2a2a2a; }
+  .tab svg { opacity: .7; }
+
+  .panel { margin-top: 24px; }
+  .card { box-shadow: none; }
+  .section-title { font-size: 15px; font-weight: 600; }
+  .section-title .dot { display: none; }
+
+  /* Buttons */
+  .btn { border-radius: 10px; font-weight: 500; }
+  .btn-primary { background: var(--ink); color: var(--bg); box-shadow: none; }
+  .btn-primary:hover { background: var(--ink); opacity: .85; box-shadow: none; }
+  .btn-light { background: transparent; }
+  .btn-light:hover { background: var(--surface-2); border-color: var(--line); color: var(--ink); }
+  .field { border-radius: 10px; }
+  .field:focus { border-color: var(--ink); box-shadow: none; }
+  .chip { border: 1px solid var(--line); background: transparent; color: var(--muted); }
+  .chip:hover { transform: none; color: var(--ink); border-color: var(--ink); }
+  .recent-item { background: transparent; border: 1px solid var(--line); border-radius: 10px; }
+  .recent-item .em { border-radius: 8px; }
+
+  /* Scanner */
+  .viewer { background: #111; box-shadow: none; border-radius: var(--radius); }
+  :root[data-theme="dark"] .viewer { background: #161616; border: 1px solid var(--line); }
+  .scan-icon { background: transparent; border: 1px solid rgba(255,255,255,.18); animation: none; border-radius: 18px; width: 72px; height: 72px; }
+  .scan-icon svg { color: #e6e6e6; width: 36px; height: 36px; }
+  .viewer-idle p { color: #a8a8a8; }
+  .scan-frame i { border-color: #fff; border-width: 2px; }
+  .scan-line { background: rgba(255,255,255,.9); box-shadow: none; height: 1px; }
+  .scan-count::before { background: #ef4444; }
+  .viewer .btn-primary, .viewer .btn-primary:hover { background: #fff; color: #111; }
+
+  /* Browse */
+  .cat { padding: 7px 14px; }
+  .cat:hover { border-color: var(--ink); }
+  .cat.active { background: var(--ink); border-color: var(--ink); color: var(--bg); box-shadow: none; }
+  .grid { gap: 12px; }
+  .prod { padding: 10px; gap: 6px; }
+  .prod:hover { transform: none; box-shadow: none; border-color: var(--muted); }
+  .prod.selected { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+  .prod .thumb { border-radius: 8px; font-size: 42px; }
+  .prod .thumb span { filter: none; }
+  .prod:hover .thumb span { transform: none; }
+  .prod .check { background: var(--ink); color: var(--bg); box-shadow: none; width: 22px; height: 22px; font-size: 12px; }
+  .prod .name { font-size: 14px; font-weight: 500; }
+  .prod .stars { color: var(--muted); }
+  .prod .price b { font-family: inherit; font-size: 17px; font-weight: 600; }
+  .prod .price small { background: none; padding: 0; }
+  .promo { background: var(--surface); color: var(--bad); box-shadow: none; border: 1px solid var(--line); font-weight: 600; }
+
+  /* Tray & toast */
+  .tray { border-radius: 14px; border: 0; backdrop-filter: none; box-shadow: 0 8px 24px -12px rgba(0,0,0,.35); transition: transform .25s ease; }
+  .tray-pill { background: rgba(128,128,128,.18); border: 0; border-radius: 8px; animation: none; }
+  .tray-count { color: inherit; opacity: .6; }
+  .tray .btn-primary { background: var(--tray-fg); color: var(--tray-bg); }
+  .toast { border-radius: 10px; box-shadow: 0 8px 24px -12px rgba(0,0,0,.35); }
+
+  /* Compare */
+  .compare-head h2 { font-size: clamp(22px, 3.2vw, 30px); font-weight: 600; letter-spacing: -.01em; }
+  .insights { gap: 12px; }
+  .insight::before { display: none; }
+  .insight small { color: var(--muted); font-weight: 500; letter-spacing: 0; }
+  .insight b { font-size: 15px; font-weight: 600; }
+  .note { border-radius: 10px; }
+  th, td { padding: 12px 16px; }
+  tbody tr:not(.group-row):hover td { background: transparent; }
+  td.best, tbody tr:not(.group-row):hover td.best { background: var(--blue-soft); color: var(--blue); font-weight: 600; }
+  td.best::after { content: ""; }
+  .group-row td { background: transparent !important; color: var(--muted) !important; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding-top: 18px; padding-bottom: 8px; }
+  .col-prod .em { border-radius: 12px; width: 56px; height: 56px; font-size: 30px; }
+  .col-prod b { font-weight: 600; }
+  .rm:hover { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+
+  /* ---------- Polish layer: clean base + soft colour, depth and motion ---------- */
+  :root {
+    --bg: #f7f8fb;
+    --tint-milk: #eaf2ff;
+    --tint-drink: #fff0e5;
+    --tint-snack: #fdf4dc;
+    --tint-noodle: #fdeae8;
+    --tint-oil: #eef6e2;
+    --tint-rice: #f1f1f6;
+    --shadow: 0 1px 2px rgba(16,24,40,.04), 0 4px 16px -6px rgba(16,24,40,.08);
+    --shadow-lg: 0 2px 4px rgba(16,24,40,.04), 0 16px 32px -12px rgba(31,111,229,.22);
+    --tray-bg: rgba(17,24,39,.88);
+    --tray-fg: #ffffff;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b0d12;
+    --card: #12151c;
+    --surface: #12151c;
+    --surface-2: #1a1e27;
+    --line: #242a35;
+    --tint-milk: #16233a;
+    --tint-drink: #2e2118;
+    --tint-snack: #2d2817;
+    --tint-noodle: #2f1c1c;
+    --tint-oil: #1e2818;
+    --tint-rice: #1d1f27;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px -6px rgba(0,0,0,.5);
+    --shadow-lg: 0 2px 4px rgba(0,0,0,.3), 0 16px 32px -12px rgba(0,0,0,.7);
+    --tray-bg: rgba(30,36,48,.9);
+    --tray-fg: #ffffff;
+  }
+
+  body { background:
+    radial-gradient(800px 360px at 15% -80px, rgba(31,111,229,.10), transparent 70%),
+    radial-gradient(600px 320px at 95% 0, rgba(90,162,255,.10), transparent 70%),
+    var(--bg); background-attachment: fixed; }
+  .card { box-shadow: var(--shadow); }
+
+  /* Hero with floating preview */
+  .hero { position: relative; display: flex; align-items: center; gap: 32px; padding: 44px 0 12px; }
+  .hero-inner { flex: 1; }
+  .hero h1 .hl { background: linear-gradient(120deg, #3d8bf7, #1350b8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  :root[data-theme="dark"] .hero h1 .hl { background-image: linear-gradient(120deg, #8fbcff, #4a8ff5); }
+  .hero-art { position: relative; width: 300px; height: 210px; flex: none; }
+  .mini { position: absolute; display: flex; align-items: center; gap: 12px; width: 230px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-lg); font-size: 13px; animation: float 6s ease-in-out infinite; }
+  .mini > span { width: 42px; height: 42px; border-radius: 12px; background: var(--tint-milk); display: grid; place-items: center; font-size: 22px; flex: none; }
+  .mini b { display: block; font-size: 16px; }
+  .mini small { color: var(--muted); }
+  .mini i { position: absolute; top: -10px; right: 12px; font-style: normal; font-size: 11px; font-weight: 600; color: #fff; background: var(--good); padding: 2px 9px; border-radius: 99px; }
+  .mini.m1 { top: 0; left: 0; transform: rotate(-4deg); opacity: .75; animation-delay: -2s; }
+  .mini.m2 { top: 70px; left: 60px; z-index: 2; border-color: var(--good); box-shadow: 0 0 0 3px var(--good-soft), var(--shadow-lg); }
+  .mini.m3 { top: 146px; left: 10px; transform: rotate(3deg); opacity: .75; animation-delay: -4s; }
+  @keyframes float { 0%,100% { translate: 0 0; } 50% { translate: 0 -6px; } }
+  @media (max-width: 820px) { .hero-art { display: none; } }
+
+  /* Tabs & buttons */
+  .tabs { background: var(--surface-2); }
+  .tab.active { color: var(--blue); }
+  :root[data-theme="dark"] .tab.active { background: var(--card); }
+  .btn-primary { background: linear-gradient(135deg, #3d8bf7, var(--blue)); color: #fff; box-shadow: 0 6px 14px -6px rgba(31,111,229,.55); }
+  .btn-primary:hover { background: linear-gradient(135deg, #3483f2, var(--blue-dark)); opacity: 1; }
+  .tray .btn-primary { background: linear-gradient(135deg, #3d8bf7, #1f6fe5); color: #fff; }
+  .field:focus { border-color: var(--blue); box-shadow: 0 0 0 4px var(--blue-soft); }
+  .chip:hover { color: var(--blue); border-color: var(--blue); }
+  .section-title .dot { display: inline-block; width: 6px; height: 6px; background: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
+
+  /* Scanner */
+  .viewer { background: radial-gradient(circle at 50% 45%, rgba(74,143,245,.22), transparent 60%), #0d1220; box-shadow: var(--shadow-lg); }
+  .scan-icon { border-color: rgba(143,188,255,.3); background: rgba(74,143,245,.12); animation: pulse 2.4s ease-in-out infinite; }
+  .scan-icon svg { color: #b9d4ff; }
+  .scan-frame i { border-color: #8fbcff; }
+  .scan-line { background: linear-gradient(90deg, transparent, #5aa2ff, transparent); box-shadow: 0 0 12px #5aa2ff; height: 2px; }
+  .recent-item { background: var(--surface); transition: border-color .15s; }
+  .recent-item:hover { border-color: var(--blue-light); }
+
+  /* Browse */
+  .cat:hover { border-color: var(--blue-light); color: var(--ink); }
+  .cat.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .prod { animation: rise .35s ease both; }
+  .prod:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--line); }
+  .prod.selected { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft), var(--shadow); }
+  .prod .thumb { border-radius: 10px; }
+  .prod .thumb span { transition: transform .25s; }
+  .prod:hover .thumb span { transform: scale(1.08); }
+  .prod .check { background: var(--blue); color: #fff; }
+  .prod .stars { color: #f5a524; }
+  .prod .price small { background: var(--surface-2); padding: 2px 8px; border-radius: 99px; }
+  .promo { background: var(--bad); color: #fff; border: 0; }
+
+  /* Tray */
+  .tray { backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; }
+  .tray-pill { background: rgba(255,255,255,.12); animation: pop .25s ease; }
+
+  /* Compare */
+  .insight { transition: transform .2s, box-shadow .2s; }
+  .insight:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  td.best, tbody tr:not(.group-row):hover td.best { background: var(--good-soft); color: var(--good); }
+  td.best::after { content: " ✓"; }
+  tbody tr:not(.group-row):hover td { background: var(--surface-2); }
+  .rm:hover { background: var(--bad); border-color: var(--bad); color: #fff; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="brand">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M18 8 L50 8 L56 16 L24 16 Z" fill="#a9cdfa"/>
+        <path d="M10 22 L24 16 L56 16 L42 22 L24 22 L24 30 L10 30 Z" fill="#5aa2ff" opacity=".9"/>
+        <path d="M10 30 L42 30 L56 44 L42 56 L10 56 L10 48 L38 48 L44 43 L38 38 L10 38 Z" fill="#1f6fe5"/>
+      </svg>
+      <span><span class="s">Shelf</span> Mind</span>
+    </div>
+    <div class="tagline">เปรียบเทียบสินค้าในร้าน ก่อนตัดสินใจซื้อ</div>
+    <button class="theme-btn" id="themeBtn" aria-label="สลับโหมดมืด/สว่าง" title="สลับโหมดมืด/สว่าง">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <!-- Pick view -->
+  <section id="pickView">
+    <div class="hero">
+      <div class="hero-inner">
+      <h1>อยากรู้ว่าชิ้นไหน<span class="hl">คุ้มกว่า?</span></h1>
+      <p>สแกนบาร์โค้ดหรือเลือกสินค้าเอง กี่ชิ้นก็ได้ แล้วกดเปรียบเทียบ</p>
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-tab="scan" role="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M11 8v8M14 8v8M17 8v8"/></svg>
+        สแกนบาร์โค้ด
+      </button>
+      <button class="tab" data-tab="browse" role="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        เลือกสินค้าเอง
+      </button>
+    </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="mini m1"><span>🥛</span><div><b>฿49</b><small>฿4.90 / 100 มล.</small></div></div>
+        <div class="mini m2"><span>🥛</span><div><b>฿39</b><small>฿3.90 / 100 มล.</small></div><i>คุ้มสุด</i></div>
+        <div class="mini m3"><span>🥛</span><div><b>฿44</b><small>฿4.89 / 100 มล.</small></div></div>
+      </div>
+    </div>
+
+    <!-- Scan panel -->
+    <div class="panel" id="panel-scan">
+      <div class="scan-wrap">
+        <div class="viewer">
+          <div id="reader"></div>
+          <div class="viewer-idle" id="viewerIdle">
+            <div class="scan-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M11 8v8M14 8v8M17 8v8"/></svg></div>
+            <p>เปิดกล้องแล้วส่องบาร์โค้ดทีละชิ้น<br>ระบบจะเพิ่มเข้ารายการเปรียบเทียบให้อัตโนมัติ</p>
+            <button class="btn btn-primary" id="startScan">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              เปิดกล้องสแกน
+            </button>
+          </div>
+          <div class="scan-frame hidden" id="scanFrame"><i></i><i></i><i></i><i></i><div class="scan-line"></div></div>
+          <div class="scan-count hidden" id="scanCount">สแกนแล้ว 0 ชิ้น</div>
+          <button class="btn btn-light stop-btn hidden" id="stopScan">หยุดสแกน</button>
+        </div>
+
+        <div class="card side">
+          <div>
+            <h3 class="section-title"><span class="dot"></span>พิมพ์เลขบาร์โค้ด</h3>
+            <p class="hint">กรณีกล้องอ่านไม่ได้ หรือบาร์โค้ดเสียหาย</p>
+          </div>
+          <form class="manual" id="manualForm">
+            <input class="field" id="manualCode" inputmode="numeric" placeholder="เช่น 8850000000017" autocomplete="off">
+            <button class="btn btn-primary" type="submit">เพิ่ม</button>
+          </form>
+          <div>
+            <p class="hint">ลองบาร์โค้ดตัวอย่าง (กดเพื่อจำลองการสแกน)</p>
+            <div class="demo-codes" id="demoCodes"></div>
+          </div>
+          <div>
+            <h3 class="section-title"><span class="dot"></span>สแกนล่าสุด</h3>
+            <div class="recent" id="recent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Browse panel -->
+    <div class="panel hidden" id="panel-browse">
+      <div class="filters">
+        <div class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input class="field" id="search" placeholder="ค้นหาชื่อสินค้า ยี่ห้อ หรือบาร์โค้ด">
+        </div>
+        <select class="field" id="sort" style="flex:0 0 auto">
+          <option value="name">เรียงตามชื่อ</option>
+          <option value="price">ราคาต่ำ → สูง</option>
+          <option value="unit">ราคาต่อหน่วยคุ้มสุด</option>
+          <option value="rating">คะแนนรีวิวสูงสุด</option>
+        </select>
+      </div>
+      <div class="cats" id="cats"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <!-- Compare view -->
+  <section id="compareView" class="hidden">
+    <div class="compare-head">
+      <button class="btn btn-light" id="backBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        เพิ่มสินค้า
+      </button>
+      <h2 id="compareTitle">เปรียบเทียบสินค้า</h2>
+      <button class="btn btn-ghost" id="clearBtn">ล้างทั้งหมด</button>
+    </div>
+    <div id="compareBody"></div>
+  </section>
+</main>
+
+<div class="tray" id="tray">
+  <div class="tray-items" id="trayItems"></div>
+  <span class="tray-count" id="trayCount"></span>
+  <button class="btn btn-primary" id="compareBtn">เปรียบเทียบ</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ---------- Store catalogue (demo data) ----------
+// nutrition values are per 100 g / 100 ml
+const CATEGORIES = {
+  milk:    { name: "นม", em: "🥛", tint: "var(--tint-milk)" },
+  drink:   { name: "เครื่องดื่ม", em: "🧃", tint: "var(--tint-drink)" },
+  snack:   { name: "ขนม", em: "🍪", tint: "var(--tint-snack)" },
+  noodle:  { name: "บะหมี่กึ่งสำเร็จรูป", em: "🍜", tint: "var(--tint-noodle)" },
+  oil:     { name: "น้ำมันพืช", em: "🫒", tint: "var(--tint-oil)" },
+  rice:    { name: "ข้าวสาร", em: "🍚", tint: "var(--tint-rice)" },
+};
+
+const RAW = [
+  // cat, brand, name, size, unit, price, kcal, sugar, fat, sodium, protein, rating, promo
+  ["milk","ฟาร์มสุข","นมจืด UHT",1000,"ml",49,64,4.8,3.6,45,3.2,4.6,false],
+  ["milk","ฟาร์มสุข","นมจืด UHT แพ็ค 4",900,"ml",48,64,4.8,3.6,45,3.2,4.5,true],
+  ["milk","เดลี่ไวท์","นมรสหวาน UHT",900,"ml",44,82,10.5,3.3,50,3,4.2,false],
+  ["milk","เดลี่ไวท์","นมพร่องมันเนย",1000,"ml",52,42,4.9,1.1,48,3.4,4.3,false],
+  ["milk","กรีนซอย","นมถั่วเหลืองสูตรหวานน้อย",1000,"ml",39,45,2.5,1.9,30,3.1,4.4,false],
+  ["drink","น้ำใส","น้ำดื่ม",1500,"ml",14,0,0,0,2,0,4.5,false],
+  ["drink","น้ำใส","น้ำดื่ม แพ็ค 6",3600,"ml",33,0,0,0,2,0,4.6,true],
+  ["drink","ซิตรัสโก","น้ำส้ม 100%",1000,"ml",79,45,9.5,0.1,3,0.6,4.4,false],
+  ["drink","ฟิซซี่","น้ำอัดลม",1250,"ml",25,42,10.6,0,10,0,4.1,false],
+  ["drink","ฟิซซี่","น้ำอัดลม ไม่มีน้ำตาล",1250,"ml",25,1,0,0,12,0,4.0,false],
+  ["drink","ทีไทม์","ชาเขียวน้ำผึ้งมะนาว",500,"ml",20,38,9,0,15,0,4.2,true],
+  ["snack","กรอบดี","มันฝรั่งแผ่นรสออริจินัล",75,"g",30,540,1.2,34,520,6.2,4.5,false],
+  ["snack","กรอบดี","มันฝรั่งแผ่นรสออริจินัล ซองใหญ่",158,"g",59,540,1.2,34,520,6.2,4.5,true],
+  ["snack","ทะเลทอง","สาหร่ายอบกรอบ",36,"g",35,520,8,30,1100,18,4.3,false],
+  ["snack","บิสกิตบ้าน","คุกกี้ช็อกโกแลตชิพ",120,"g",39,490,28,23,310,6,4.4,false],
+  ["snack","นัทเฮาส์","อัลมอนด์อบ",80,"g",79,600,4,51,5,21,4.7,false],
+  ["noodle","รสเด็ด","บะหมี่กึ่งฯ รสต้มยำกุ้ง",55,"g",7,436,4.4,18,2700,8.7,4.6,false],
+  ["noodle","รสเด็ด","บะหมี่กึ่งฯ รสหมูสับ",55,"g",7,445,3.6,18.5,2500,9.1,4.4,false],
+  ["noodle","รสเด็ด","บะหมี่กึ่งฯ แพ็ค 10",550,"g",62,436,4.4,18,2700,8.7,4.5,true],
+  ["noodle","เส้นทอง","เส้นหมี่ข้าวกล้องกึ่งฯ",60,"g",15,360,2,4,1400,7,4.1,false],
+  ["oil","ทองคำ","น้ำมันปาล์ม",1000,"ml",49,884,0,100,0,0,4.3,false],
+  ["oil","ทองคำ","น้ำมันถั่วเหลือง",1000,"ml",62,884,0,100,0,0,4.5,false],
+  ["oil","ไลฟ์ออยล์","น้ำมันรำข้าว",1000,"ml",89,884,0,100,0,0,4.6,true],
+  ["rice","นาทอง","ข้าวหอมมะลิ 100%",5000,"g",219,350,0.1,0.6,5,7.1,4.7,false],
+  ["rice","นาทอง","ข้าวหอมมะลิ 100%",1000,"g",55,350,0.1,0.6,5,7.1,4.6,false],
+  ["rice","เมล็ดดี","ข้าวกล้องหอมมะลิ",1000,"g",65,360,0.9,2.7,4,7.5,4.5,false],
+  ["rice","เมล็ดดี","ข้าวไรซ์เบอร์รี่",1000,"g",89,355,0.5,2.1,3,7.7,4.6,false],
+];
+
+// valid EAN-13 starting with the Thai GS1 prefix 885
+function ean13(body12) {
+  const s = body12.split("").reduce((a, d, i) => a + (+d) * (i % 2 ? 3 : 1), 0);
+  return body12 + ((10 - (s % 10)) % 10);
+}
+const PRODUCTS = RAW.map((r, i) => {
+  const [cat, brand, name, size, unit, price, kcal, sugar, fat, sodium, protein, rating, promo] = r;
+  return {
+    id: "p" + i,
+    barcode: ean13("885" + String(1000000 + i * 7).padStart(9, "0")),
+    cat, brand, name, size, unit, price, kcal, sugar, fat, sodium, protein, rating, promo,
+    unitPrice: price / size * 100,
+  };
+});
+const BY_CODE = new Map(PRODUCTS.map(p => [p.barcode, p]));
+const BY_ID = new Map(PRODUCTS.map(p => [p.id, p]));
+
+// ---------- State ----------
+let compare = [];
+try { compare = JSON.parse(localStorage.getItem("sm-compare") || "[]").filter(id => BY_ID.has(id)); } catch {}
+let recent = [];
+let currentCat = "all";
+let scanner = null;
+let scanTotal = 0;
+let lastScan = { code: "", t: 0 };
+
+const $ = s => document.querySelector(s);
+const fmt = (n, d = 2) => n.toLocaleString("th-TH", { minimumFractionDigits: d, maximumFractionDigits: d });
+const sizeText = p => p.size >= 1000 ? `${fmt(p.size / 1000, p.size % 1000 ? 1 : 0)} ${p.unit === "ml" ? "ลิตร" : "กก."}` : `${p.size} ${p.unit === "ml" ? "มล." : "ก."}`;
+const unitLabel = p => p.unit === "ml" ? "100 มล." : "100 ก.";
+
+function save() { try { localStorage.setItem("sm-compare", JSON.stringify(compare)); } catch {} }
+
+function toast(msg, err = false) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.className = "toast show" + (err ? " err" : "");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.className = "toast", 1800);
+}
+
+function addToCompare(p, silent) {
+  if (compare.includes(p.id)) { if (!silent) toast(`มี "${p.name}" ในรายการแล้ว`); return false; }
+  compare.push(p.id); save(); renderAll();
+  if (!silent) toast(`เพิ่ม ${p.brand} ${p.name} แล้ว`);
+  return true;
+}
+function removeFromCompare(id) { compare = compare.filter(x => x !== id); save(); renderAll(); }
+function toggleCompare(id) { compare.includes(id) ? removeFromCompare(id) : addToCompare(BY_ID.get(id)); }
+
+// ---------- Barcode handling ----------
+function handleCode(code) {
+  code = String(code).trim();
+  const p = BY_CODE.get(code);
+  if (!p) { toast(`ไม่พบสินค้าบาร์โค้ด ${code} ในร้านนี้`, true); return; }
+  recent = [p, ...recent.filter(x => x.id !== p.id)].slice(0, 20);
+  addToCompare(p);
+  renderRecent();
+}
+
+async function startScan() {
+  if (typeof Html5Qrcode === "undefined") { toast("โหลดตัวสแกนไม่สำเร็จ ลองพิมพ์เลขบาร์โค้ดแทน", true); return; }
+  const F = Html5QrcodeSupportedFormats;
+  scanner = new Html5Qrcode("reader", { formatsToSupport: [F.EAN_13, F.EAN_8, F.UPC_A, F.UPC_E, F.CODE_128], verbose: false });
+  try {
+    await scanner.start(
+      { facingMode: "environment" },
+      { fps: 12, qrbox: (w, h) => ({ width: Math.floor(w * .76), height: Math.floor(h * .5) }), aspectRatio: 4 / 3 },
+      code => {
+        const now = Date.now();
+        if (code === lastScan.code && now - lastScan.t < 2500) return;
+        lastScan = { code, t: now };
+        if (navigator.vibrate) navigator.vibrate(60);
+        scanTotal++;
+        $("#scanCount").textContent = `สแกนแล้ว ${scanTotal} ชิ้น`;
+        handleCode(code);
+      },
+      () => {}
+    );
+    $("#viewerIdle").classList.add("hidden");
+    ["#scanFrame", "#scanCount", "#stopScan"].forEach(s => $(s).classList.remove("hidden"));
+  } catch (e) {
+    scanner = null;
+    toast("เปิดกล้องไม่ได้ — ตรวจสอบสิทธิ์การใช้กล้อง หรือพิมพ์เลขบาร์โค้ดแทน", true);
+  }
+}
+async function stopScan() {
+  if (scanner) { try { await scanner.stop(); scanner.clear(); } catch {} scanner = null; }
+  $("#viewerIdle").classList.remove("hidden");
+  ["#scanFrame", "#scanCount", "#stopScan"].forEach(s => $(s).classList.add("hidden"));
+}
+
+// ---------- Rendering ----------
+function renderRecent() {
+  const el = $("#recent");
+  if (!recent.length) { el.innerHTML = '<div class="empty-state">ยังไม่มีสินค้าที่สแกน<br>ส่องบาร์โค้ดหรือกดเลขตัวอย่างด้านบน</div>'; return; }
+  el.innerHTML = recent.map(p => `
+    <div class="recent-item">
+      <div class="em" style="background:${CATEGORIES[p.cat].tint}">${CATEGORIES[p.cat].em}</div>
+      <div class="t"><b>${p.brand} ${p.name}</b><small>${sizeText(p)} · ฿${fmt(p.price, 0)}</small></div>
+      <button class="btn btn-ghost" data-toggle="${p.id}">${compare.includes(p.id) ? "นำออก" : "เพิ่ม"}</button>
+    </div>`).join("");
+}
+
+function renderCats() {
+  const cats = [["all", "ทั้งหมด"], ...Object.entries(CATEGORIES).map(([k, v]) => [k, `${v.em} ${v.name}`])];
+  $("#cats").innerHTML = cats.map(([k, n]) => `<button class="cat ${k === currentCat ? "active" : ""}" data-cat="${k}">${n}</button>`).join("");
+}
+
+function renderGrid() {
+  const q = $("#search").value.trim().toLowerCase();
+  const sort = $("#sort").value;
+  let list = PRODUCTS.filter(p => (currentCat === "all" || p.cat === currentCat) &&
+    (!q || `${p.brand} ${p.name} ${p.barcode} ${CATEGORIES[p.cat].name}`.toLowerCase().includes(q)));
+  const sorters = {
+    name: (a, b) => (a.brand + a.name).localeCompare(b.brand + b.name, "th"),
+    price: (a, b) => a.price - b.price,
+    unit: (a, b) => a.unitPrice - b.unitPrice,
+    rating: (a, b) => b.rating - a.rating,
+  };
+  list.sort(sorters[sort]);
+  if (!list.length) { $("#grid").innerHTML = '<div class="empty" style="grid-column:1/-1">ไม่พบสินค้าที่ค้นหา</div>'; return; }
+  $("#grid").innerHTML = list.map(p => {
+    const on = compare.includes(p.id);
+    const c = CATEGORIES[p.cat];
+    return `
+    <div class="card prod ${on ? "selected" : ""}">
+      ${p.promo ? '<span class="promo">โปรฯ</span>' : ""}
+      <div class="thumb" style="background:${c.tint}"><span>${c.em}</span>${on ? '<div class="check">✓</div>' : ""}</div>
+      <div class="meta"><span>${p.brand} · ${sizeText(p)}</span><span class="stars">★ ${fmt(p.rating, 1)}</span></div>
+      <div class="name">${p.name}</div>
+      <div class="price"><b>฿${fmt(p.price, 0)}</b><small>฿${fmt(p.unitPrice)} / ${unitLabel(p)}</small></div>
+      <button class="btn ${on ? "btn-primary" : "btn-light"}" data-toggle="${p.id}">${on ? "✓ อยู่ในรายการ" : "+ เปรียบเทียบ"}</button>
+    </div>`;
+  }).join("");
+}
+
+function renderTray() {
+  const n = compare.length;
+  $("#tray").classList.toggle("show", n > 0 && $("#compareView").classList.contains("hidden"));
+  $("#trayItems").innerHTML = compare.map(id => `<div class="tray-pill" title="${BY_ID.get(id).name}">${CATEGORIES[BY_ID.get(id).cat].em}</div>`).join("");
+  $("#trayCount").textContent = `${n} ชิ้น`;
+  $("#compareBtn").disabled = n < 2;
+  $("#compareBtn").style.opacity = n < 2 ? .5 : 1;
+  $("#compareBtn").textContent = n < 2 ? "เลือกอีก 1 ชิ้น" : "เปรียบเทียบ";
+}
+
+// health score 0–100: fewer sugar/sodium/sat-fat & more protein = better
+function healthScore(p) {
+  let s = 100;
+  s -= Math.min(30, p.sugar * 2);
+  s -= Math.min(30, p.sodium / 40);
+  s -= Math.min(20, p.fat / 3);
+  s -= Math.min(10, p.kcal / 60);
+  s += Math.min(10, p.protein);
+  return Math.max(0, Math.min(100, Math.round(s)));
+}
+
+function renderCompare() {
+  const items = compare.map(id => BY_ID.get(id));
+  $("#compareTitle").textContent = `เปรียบเทียบ ${items.length} ชิ้น`;
+  const body = $("#compareBody");
+  if (items.length < 2) {
+    body.innerHTML = `<div class="card empty">เลือกสินค้าอย่างน้อย 2 ชิ้นเพื่อเปรียบเทียบ<br><br><button class="btn btn-primary" onclick="showPick()">เพิ่มสินค้า</button></div>`;
+    return;
+  }
+  items.forEach(p => p.health = healthScore(p));
+
+  const best = (key, dir) => {
+    const vals = items.map(p => p[key]);
+    const target = dir === "min" ? Math.min(...vals) : Math.max(...vals);
+    return vals.every(v => v === target) ? null : target;
+  };
+  const pick = (key, dir) => [...items].sort((a, b) => dir === "min" ? a[key] - b[key] : b[key] - a[key])[0];
+
+  const cheapest = pick("unitPrice", "min");
+  const healthiest = pick("health", "max");
+  const topRated = pick("rating", "max");
+  const priciest = pick("unitPrice", "max");
+  const saving = (priciest.unitPrice - cheapest.unitPrice) / priciest.unitPrice * 100;
+
+  const mixedUnits = new Set(items.map(p => p.unit)).size > 1;
+  const mixedCats = new Set(items.map(p => p.cat)).size > 1;
+
+  const insight = (ic, bg, label, p, extra) => `
+    <div class="card insight" style="--accent:${bg.replace("-soft", "")}">
+      <div class="ic" style="background:${bg}">${ic}</div>
+      <div><small>${label}</small><b>${p.brand} ${p.name} ${sizeText(p)}</b><span>${extra}</span></div>
+    </div>`;
+
+  let html = `<div class="insights">
+    ${insight("💰", "var(--good-soft)", "คุ้มค่าที่สุด (ราคาต่อหน่วย)", cheapest, `฿${fmt(cheapest.unitPrice)}/${unitLabel(cheapest)}${saving >= 1 ? ` · ถูกกว่าแพงสุด ${fmt(saving, 0)}%` : ""}`)}
+    ${insight("🥗", "var(--blue-soft)", "ดีต่อสุขภาพที่สุด", healthiest, `คะแนนสุขภาพ ${healthiest.health}/100`)}
+    ${insight("⭐", "var(--warn-soft)", "รีวิวดีที่สุด", topRated, `${fmt(topRated.rating, 1)} / 5`)}
+  </div>`;
+
+  if (mixedCats) html += `<div class="note">สินค้าต่างหมวดกัน${mixedUnits ? " และหน่วยต่างกัน (มล. / ก.)" : ""} — ราคาต่อหน่วยอาจเทียบกันได้ไม่ตรงนัก</div>`;
+
+  const rows = [
+    { group: "ราคา" },
+    { label: "ราคา", key: "price", dir: "min", f: p => `฿${fmt(p.price, 0)}` },
+    { label: "ขนาด", f: p => sizeText(p) },
+    { label: "ราคาต่อ 100 หน่วย", key: "unitPrice", dir: "min", f: p => `฿${fmt(p.unitPrice)}` },
+    { label: "โปรโมชั่น", f: p => p.promo ? '<span style="color:var(--bad);font-weight:600">มีโปรฯ</span>' : "–" },
+    { group: "โภชนาการ (ต่อ 100 ก./มล.)" },
+    { label: "พลังงาน", key: "kcal", dir: "min", f: p => `${fmt(p.kcal, 0)} kcal` },
+    { label: "น้ำตาล", key: "sugar", dir: "min", f: p => `${fmt(p.sugar, 1)} ก.` },
+    { label: "ไขมัน", key: "fat", dir: "min", f: p => `${fmt(p.fat, 1)} ก.` },
+    { label: "โซเดียม", key: "sodium", dir: "min", f: p => `${fmt(p.sodium, 0)} มก.` },
+    { label: "โปรตีน", key: "protein", dir: "max", f: p => `${fmt(p.protein, 1)} ก.` },
+    { label: "คะแนนสุขภาพ", key: "health", dir: "max", f: p => {
+      const c = p.health >= 70 ? ["var(--good-soft)", "var(--good)"] : p.health >= 45 ? ["var(--warn-soft)", "var(--warn-ink)"] : ["var(--bad-soft)", "var(--bad)"];
+      return `<span class="score" style="background:${c[0]};color:${c[1]}">${p.health}</span>`;
+    } },
+    { group: "อื่น ๆ" },
+    { label: "รีวิวลูกค้า", key: "rating", dir: "max", f: p => `★ ${fmt(p.rating, 1)}` },
+    { label: "หมวดหมู่", f: p => CATEGORIES[p.cat].name },
+    { label: "บาร์โค้ด", f: p => `<small style="color:var(--muted)">${p.barcode}</small>` },
+  ];
+
+  html += `<div class="card table-wrap"><table>
+    <thead><tr><th></th>${items.map(p => `
+      <th><div class="col-prod">
+        <button class="rm" data-remove="${p.id}" aria-label="นำออก">✕</button>
+        <div class="em" style="background:${CATEGORIES[p.cat].tint}">${CATEGORIES[p.cat].em}</div>
+        <b>${p.brand} ${p.name}</b><small>${sizeText(p)}</small>
+        <div class="badges">${[
+          p === cheapest && '<span class="badge" style="background:var(--good-soft);color:var(--good)">💰 คุ้มสุด</span>',
+          p === healthiest && '<span class="badge" style="background:var(--blue-soft);color:var(--blue)">🥗 สุขภาพดีสุด</span>',
+          p === topRated && '<span class="badge" style="background:var(--warn-soft);color:var(--warn-ink)">⭐ รีวิวดีสุด</span>',
+        ].filter(Boolean).join("")}</div>
+      </div></th>`).join("")}</tr></thead>
+    <tbody>${rows.map(r => {
+      if (r.group) return `<tr class="group-row"><td colspan="${items.length + 1}">${r.group}</td></tr>`;
+      const b = r.key ? best(r.key, r.dir) : null;
+      return `<tr><td>${r.label}</td>${items.map(p => `<td class="${b !== null && p[r.key] === b ? "best" : ""}">${r.f(p)}</td>`).join("")}</tr>`;
+    }).join("")}</tbody>
+  </table></div>`;
+
+  body.innerHTML = html;
+}
+
+function renderAll() {
+  renderGrid(); renderRecent(); renderTray();
+  if (!$("#compareView").classList.contains("hidden")) renderCompare();
+}
+
+function showCompare() {
+  stopScan();
+  $("#pickView").classList.add("hidden");
+  $("#compareView").classList.remove("hidden");
+  renderCompare(); renderTray(); window.scrollTo(0, 0);
+}
+function showPick() {
+  $("#compareView").classList.add("hidden");
+  $("#pickView").classList.remove("hidden");
+  renderAll(); window.scrollTo(0, 0);
+}
+
+// ---------- Events ----------
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
+  document.querySelectorAll(".tab").forEach(x => x.classList.toggle("active", x === t));
+  $("#panel-scan").classList.toggle("hidden", t.dataset.tab !== "scan");
+  $("#panel-browse").classList.toggle("hidden", t.dataset.tab !== "browse");
+  if (t.dataset.tab !== "scan") stopScan();
+}));
+document.addEventListener("click", e => {
+  const tg = e.target.closest("[data-toggle]"); if (tg) return toggleCompare(tg.dataset.toggle);
+  const rm = e.target.closest("[data-remove]"); if (rm) return removeFromCompare(rm.dataset.remove);
+  const cat = e.target.closest("[data-cat]"); if (cat) { currentCat = cat.dataset.cat; renderCats(); renderGrid(); }
+  const demo = e.target.closest("[data-code]"); if (demo) handleCode(demo.dataset.code);
+});
+$("#startScan").addEventListener("click", startScan);
+$("#stopScan").addEventListener("click", stopScan);
+$("#manualForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const v = $("#manualCode").value.replace(/\D/g, "");
+  if (!v) return;
+  handleCode(v); $("#manualCode").value = "";
+});
+$("#search").addEventListener("input", renderGrid);
+$("#sort").addEventListener("change", renderGrid);
+$("#compareBtn").addEventListener("click", () => compare.length >= 2 && showCompare());
+$("#backBtn").addEventListener("click", showPick);
+$("#clearBtn").addEventListener("click", () => { compare = []; save(); showPick(); });
+
+$("#demoCodes").innerHTML = [0, 2, 4, 11, 16, 23].map(i => `<button class="chip" data-code="${PRODUCTS[i].barcode}">${PRODUCTS[i].barcode}</button>`).join("");
+
+$("#themeBtn").addEventListener("click", () => {
+  const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = t;
+  try { localStorage.setItem("sm-theme", t); } catch {}
+});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
+  let saved = null;
+  try { saved = localStorage.getItem("sm-theme"); } catch {}
+  if (!saved) document.documentElement.dataset.theme = e.matches ? "dark" : "light";
+});
+
+renderCats();
+renderAll();
+</script>
+</body>
+</html>
